@@ -47,7 +47,7 @@ section {
 
 /* Profile Section */
 #profile {
-    background-image: url('profile-background.jpg');
+    background-color: rgba(60, 179, 113, 0.7);
     background-size: cover;
     background-position: center;
     color: #fff;
