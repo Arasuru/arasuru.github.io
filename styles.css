@@ -45,6 +45,23 @@ section {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Profile Section */
+#profile {
+    background-image: url('profile-background.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-align: center;
+}
+
+.profile-card {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 8px;
+    display: inline-block;
+    text-align: center;
+}
+
 .profile-pic {
     width: 150px;
     border-radius: 50%;
@@ -61,6 +78,14 @@ a.button {
     text-decoration: none;
     border-radius: 5px;
     transition: background-color 0.3s;
+}
+
+a.button.linkedin {
+    background-color: #0077b5;
+}
+
+a.button.github {
+    background-color: #24292e;
 }
 
 a.button:hover {
