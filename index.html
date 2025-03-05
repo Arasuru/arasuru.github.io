@@ -8,6 +8,15 @@
 </head>
 <body>
     <header>
+        <nav>
+            <ul>
+                <li><a href="#profile">Profile</a></li>
+                <li><a href="#publications">Publications</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#hobbies">Hobbies</a></li>
+            </ul>
+        </nav>
         <h1>Welcome to My Portfolio</h1>
     </header>
     <main>
@@ -15,10 +24,10 @@
             <h2>Profile</h2>
             <img src="profile.jpg" alt="Profile Picture" class="profile-pic">
             <p>Name: Ravikiran Arasur</p>
-            <p>M.Sc Computer Science</p>
+            <p>Details: Brief description about you.</p>
             <p>
-                <a href="https://www.linkedin.com/in/ravikiranarasur">LinkedIn</a> | 
-                <a href="https://github.com/arasuru">GitHub</a>
+                <a href="https://www.linkedin.com/in/ravikiranarasur" class="button">LinkedIn</a>
+                <a href="https://github.com/arasuru" class="button">GitHub</a>
             </p>
         </section>
         <section id="publications">
@@ -31,23 +40,29 @@
         </section>
         <section id="projects">
             <h2>Projects</h2>
-            <div class="project-tile" data-details="Project 1 details...">
-                <p>Project 1</p>
-            </div>
-            <div class="project-tile" data-details="Project 2 details...">
-                <p>Project 2</p>
-            </div>
-            <div class="project-tile" data-details="Project 3 details...">
-                <p>Project 3</p>
+            <div class="projects-grid">
+                <div class="project-tile" data-details="Project 1 details...">
+                    <p>Project 1</p>
+                </div>
+                <div class="project-tile" data-details="Project 2 details...">
+                    <p>Project 2</p>
+                </div>
+                <div class="project-tile" data-details="Project 3 details...">
+                    <p>Project 3</p>
+                </div>
             </div>
         </section>
-        <section id="skills-hobbies">
-            <h2>Skills and Hobbies</h2>
+        <section id="skills">
+            <h2>Skills</h2>
+            <p>List your skills and hobbies here.</p>
+        </section>
+        <section id="hobbies">
+            <h2>Hobbies</h2>
             <p>List your skills and hobbies here.</p>
         </section>
     </main>
     <footer>
-        <p>© 2025 Ravikiraqn Arasur</p>
+        <p>© 2025 Your Name</p>
     </footer>
     <script src="scripts.js"></script>
 </body>
