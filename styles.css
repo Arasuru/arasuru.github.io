@@ -47,10 +47,10 @@ section {
 
 /* Profile Section */
 #profile {
-    background-color: rgba(60, 179, 113, 0.7);
+    background-color: #eef2f7;;
     background-size: cover;
     background-position: center;
-    color: #fff;
+    color: #000000;
     padding: 40px 20px;
 }
 
@@ -66,6 +66,7 @@ section {
     border-radius: 8px;
     width: 300px;
     text-align: center;
+    color: #ffffff;
 }
 
 .profile-pic {
@@ -77,11 +78,23 @@ section {
 
 .profile-details {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.profile-details p {
-    margin: 10px 0;
+.profile-details .name {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-family: serif;
 }
+
+.profile-details .description {
+    font-size: 16px;
+    color: #2c2c2c;
+}
+
 
 a.button {
     display: inline-block;
@@ -95,67 +108,229 @@ a.button {
 }
 
 a.button.linkedin {
-    background-color: #0077b5;
+    background-color: #4f7aff;
 }
 
+a.button.linkedin:hover {
+    background-color: #0040ff;
+}
 a.button.github {
-    background-color: #24292e;
+    background-color:#ff9547;
 }
 
-a.button:hover {
-    background-color: #0056b3;
+a.button.github:hover {
+    background-color: #ff6e03 ;
 }
 
-/* Projects Grid */
-.projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-}
-
-.project-tile {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
+/* Work & Education Section */
+#work-education {
+    margin-bottom: 40px;
+    background-color: #eef2f7;
     padding: 20px;
     border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.project-tile:hover {
-    background-color: #e0e0e0;
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.two-columns {
+    display: flex;
+    gap: 20px;
+    border-top: 2px solid #ccc;
 }
 
-.project-tile p {
-    margin: 0;
+.work-experience, .education {
+    flex: 1;
+}
+
+.work-experience h3, .education h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #0077b5;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 15px;
+}
+
+ul li strong {
+    font-size: 18px;
+}
+
+ul li p {
+    font-size: 16px;
+    color: #555
+}
+
+/*Publications Section*/
+#publications {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+  }
+  
+  #publications h2 {
     text-align: center;
-    font-weight: bold;
-}
-
-.tooltip {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  .publication-container {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .publication {
+    flex: 1;
+    padding: 15px;
+    margin-right: 20px;
+  }
+  
+  .publication h3 {
+    margin-top: 0;
+    color: #007acc;
+  }
+  
+  .publication p {
+    margin: 5px 0;
+  }
+  
+  .publication .btn {
+    display: inline-block;
+    padding: 10px 15px;
+    color: #fff;
+    background-color: #007acc;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  .publication .btn:hover {
+    background-color: #005b99;
+  }
+  
+  .publication-video {
+    flex: 1;
+  }
+  
+  
+/* Projects Grid */
+#projects {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+  }
+  
+  #projects h2 {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+  }
+  
+  .project-tile {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, height 0.3s ease;
+  }
+  
+  .project-tile:hover {
+    transform: scale(1.05);
+    height: 240px; /* 20% increase */
+  }
+  
+  .project-title {
     position: absolute;
-    left: 50%;
-    bottom: 120%;
-    transform: translateX(-50%);
-    background-color: #333;
+    bottom: 10px;
+    left: 10px;
+    margin: 0;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  .project-info {
+    position: absolute;
+    top: 0;
+    left: 8%;
+    width: 80%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
     color: #fff;
     padding: 10px;
-    border-radius: 8px;
-    white-space: nowrap;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     opacity: 0;
-    pointer-events: none;
     transition: opacity 0.3s ease;
-}
-
-.project-tile:hover .tooltip {
+  }
+  
+  .project-tile:hover .project-info {
     opacity: 1;
-}
-
+  }
+  
+/* Hobbies */
+#hobbies {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+  }
+  
+  #hobbies h2 {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  .hobbies-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  .hobby-card {
+    width: 300px;
+    margin: 10px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .hobby-card img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .hobby-card:hover {
+    transform: scale(1.05);
+  }
+  
+  .hobby-card h3 {
+    margin-top: 10px;
+    color: #007acc;
+  }
+  
+  .hobby-card p {
+    margin: 5px 0 0;
+  }
+  
 /* Footer */
 footer {
     background-color: #333;
