@@ -1,4 +1,3 @@
-// Add any JavaScript functionality here
 document.addEventListener('DOMContentLoaded', () => {
     const projectTiles = document.querySelectorAll('.project-tile');
 
@@ -8,14 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const tooltip = document.createElement('div');
             tooltip.className = 'tooltip';
             tooltip.innerHTML = details;
-            document.body.appendChild(tooltip);
-
-            const rect = event.target.getBoundingClientRect();
-            tooltip.style.left = `${rect.left}px`;
-            tooltip.style.top = `${rect.bottom + 5}px`;
+            tile.appendChild(tooltip);
 
             tile.addEventListener('mouseout', () => {
-                document.body.removeChild(tooltip);
+                tile.removeChild(tooltip);
             }, { once: true });
         });
     });
