@@ -336,12 +336,12 @@ h3 {
 }
 
 .hobby-card:hover {
-    transform: scale(1.1);
+    transform: scale(1.03);
 }
 
 /* Footer */
 footer {
-    background-color: #333333;
+    background-color: #1a1a1a;
     color: #bbbbbb;
     padding: 20px;
     text-align: center;
