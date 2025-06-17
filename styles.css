@@ -255,8 +255,9 @@ h3 {
 
 .project-tile {
     position: relative;
-    background-size: cover;
+    background-size: contain;
     background-position: center;
+    background-repeat: no-repeat;
     border-radius: 10px;
     overflow: hidden;
     height: 200px;
