@@ -3,81 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio</title>
+    <title>Ravikiran Arasur | Portfolio</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
         <nav>
             <ul>
                 <li><a href="#profile">Profile</a></li>
-                <li><a href="#work-education">Work & Education</a>
+                <li><a href="#work-education">Experience</a></li>
                 <li><a href="#publications">Publications</a></li>
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#hobbies">Hobbies</a></li>
             </ul>
         </nav>
     </header>
+
     <main>
         <section id="profile">
-            <div class="profile-section">
-                <div class="profile-card" style="background-image: url('./resources/profile-background.JPG');">
-                    <img src="./resources/image.png" alt="Profile Picture" class="profile-pic">
-                    <p>Email: ravikiranarasur4all@gmail.com</p>
-                    <p>Phone: +4917646669035</p>
-                    <p>
-                        <a href="https://www.linkedin.com/in/ravikiranarasur" class="button linkedin"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                        <a href="https://github.com/arasuru" class="button github"><i class="fab fa-github"></i> GitHub</a>
-                    </p>
-                </div>
-                <div class="profile-details">
-                    <p class="name">Ravikiran Arasur</p>
-                    <p class="description">I am a passionate Computer Science graduate student with one year of experience in Python. My expertise lies in Machine Learning, Deep Learning, and IoT, with hands-on experience in various projects. Always eager to learn and innovate, I am fluent in English and currently expanding my skills in German. Explore my work and feel free to connect! 🚀</p>
-                </div>
-            </div>
-        </section>
-        <section id="work-education">
-            <h2>Professional Work & Education</h2>
-            <div class="two-columns">
-                <div class="work-experience">
-                    <h3>Work Experience</h3>
-                    <ul>
-                        <li>
-                            <strong>Tata Consultancy ltd.</strong>
-                            <p>Worked in the role of <b>System Engineer</b>. Gained experience in the field of automation of desktop applications and handling database systems. Worked in an Agile environment, also worked with Atlassian tools and Git</p>
-                        </li>
-                    </ul>
-                </div>
-                <div class="education">
-                    <h3>Education</h3>
-                    <ul>
-                        <li>
-                            <strong>Master's Degree: University of Siegen</strong>
-                            <p>Computer Science, Grade:1.9</p>
-                        </li>
-                        <li>
-                            <strong>Bachelor's Degree:Acharya Institute of Technology(VTU)</strong>
-                            <p>Information Science, Grade: 1.7</p>
-                        </li>
-                    </ul>
+            <div class="hero-background" style="background-image: url('./resources/profile-background.JPG');"></div>
+            <div class="profile-container fade-in">
+                <div class="profile-content">
+                    <div class="profile-image-wrapper">
+                        <img src="./resources/image.png" alt="Ravikiran Arasur" class="profile-pic">
+                    </div>
+                    <div class="profile-text">
+                        <h1 class="name">Ravikiran Arasur</h1>
+                        <p class="tagline">Computer Science Graduate Student | ML & IoT Specialist</p>
+                        <p class="description">
+                            I am a passionate Computer Science graduate student with one year of experience in Python. 
+                            My expertise lies in Machine Learning, Deep Learning, and IoT. 
+                            Always eager to learn and innovate, I am fluent in English and currently expanding my skills in German.
+                        </p>
+                        <div class="contact-links">
+                            <a href="mailto:ravikiranarasur4all@gmail.com" class="text-link"><i class="fas fa-envelope"></i> ravikiranarasur4all@gmail.com</a>
+                            <span class="divider">|</span>
+                            <a href="tel:+4917646669035" class="text-link"><i class="fas fa-phone"></i> +49 176 4666 9035</a>
+                        </div>
+                        <div class="social-buttons">
+                            <a href="https://www.linkedin.com/in/ravikiranarasur" class="button outline"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                            <a href="https://github.com/arasuru" class="button outline"><i class="fab fa-github"></i> GitHub</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
-        <section id="publications">
-            <h2>Publications</h2>
+
+        <section id="work-education" class="fade-in">
+            <div class="section-header">
+                <h2>Resume</h2>
+                <div class="underline"></div>
+            </div>
+            
+            <div class="resume-grid">
+                <div class="resume-column">
+                    <h3><i class="fas fa-briefcase"></i> Work Experience</h3>
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>System Engineer</h4>
+                            <span class="company">Tata Consultancy Ltd.</span>
+                        </div>
+                        <div class="card-body">
+                            <p>Automation of desktop applications and handling database systems. Worked in an Agile environment using Atlassian tools and Git.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resume-column">
+                    <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Master's Degree</h4>
+                            <span class="company">University of Siegen</span>
+                        </div>
+                        <div class="card-body">
+                            <p>Computer Science<br><strong>Grade: 1.9</strong></p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Bachelor's Degree</h4>
+                            <span class="company">Acharya Institute of Technology (VTU)</span>
+                        </div>
+                        <div class="card-body">
+                            <p>Information Science<br><strong>Grade: 1.7</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="publications" class="alt-bg fade-in">
+            <div class="section-header">
+                <h2>Publications</h2>
+                <div class="underline"></div>
+            </div>
             <div class="publication-container">
-                <div class="publication">
+                <div class="publication-text">
                     <h3>Human Activity Recognition</h3>
-                    <p>Ubiquitous systems development. Developed a fully independent real-time system that collects and 
-                        analyzes the acceleration data and predicts if the user is taking lifts or stairs in real-time. This is a 
-                        research exploring the possibility of using pressure data in such tasks, Random forest has been 
-                        implemented as a classification algorithm. This research paper has been acceptyed by iWOAR 
-                        conference and is published in springer forum</p>
-                    <a href="https://www.springerprofessional.de/raising-the-bar-ometer-identifying-a-user-s-stair-and-lift-usage/50616476" class="button">Read More</a>
+                    <p class="subtitle">Ubiquitous Systems Development</p>
+                    <p>Developed a fully independent real-time system that collects and analyzes acceleration data to predict if the user is taking lifts or stairs. This research explores the possibility of using pressure data in such tasks using Random Forest classification. Accepted by iWOAR conference and published in Springer Forum.</p>
+                    <a href="https://www.springerprofessional.de/raising-the-bar-ometer-identifying-a-user-s-stair-and-lift-usage/50616476" class="button primary">Read Paper</a>
                 </div>
-                <div class="publication-video">
-                    <video width="560" height="315" controls>
+                <div class="publication-media">
+                    <video controls>
                         <source src="./resources/stairsvlift.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -85,82 +118,104 @@
             </div>
         </section>
         
-        <section id="projects">
-            <h2>Projects</h2>
-            <div class="project-grid">
-              <div class="project-tile" style="background-image: url('./resources/handpose.jpg');">
-                <h3 class="project-title">Multi-Modal 3D Hand Pose Estimation</h3>
-                <div class="project-info">
-                  <p>The thesis focuses on 3D multi-modal hand pose estimation using acceleration data from a 
-                    sensor-equipped glove and video input. It integrates MediaPipe overlays for visual hand tracking, 
-                    combining sensor data and computer vision techniques. This approach enhances pose accuracy 
-                    and robustness for applications in VR, robotics, and human-computer interaction. 
-                    Technologies Used: Machine learning, Mediapipe, Python, CNN. </p>
-                </div>
-              </div>
-              <div class="project-tile" style="background-image: url('./resources/cnn.jpg');">
-                <h3 class="project-title">CNN Binary Image classifier</h3>
-                <div class="project-info">
-                  <p>This is personal project built as a hobby. Implemented CNN model using tensorflow library for binary 
-                    classification of images. This code can be used as a pipeline and can be applied to any image processing 
-                    problem where binary classification is required with very less to no code changes.  
-                    Technologies Used: Deep learning, CNN, tensorflow </p>
-                </div>
-              </div>
-              <div class="project-tile" style="background-image: url('./resources/multiclass.png');">
-                <h3 class="project-title">Multiclass Image classifier along with GAN</h3>
-                <div class="project-info">
-                  <p>Multiclass Image classifier along with GAN 
-                    This is personal project built as a hobby. Implemented model using tensorflow library for Multiclass 
-                    classification of images. Basic GAN has been built which works on MNIST and MNIST fashion dataset 
-                    and generates new images. The new generated images from GAN model has been fed to  image 
-                    classification model to check the skewness and mode collapse. 
-                    Technologies Used: Deep learning, CNN, tensorflow, GAN, Image Classification.</p>
-                </div>
-              </div>
-              <div class="project-tile" style="background-image: url('./resources/agriculture.png');">
-                <h3 class="project-title">Precision Agriculture through IoT </h3>
-                <div class="project-info">
-                  <p>IoT device built using ESP32 and other sensors to detect the soil moisture level and provide useful 
-                    information for the users to maintain the optimal soil moisture level for different kind of plants without 
-                    the wastage of resources.  
-                    Technologies used: Cloud, Machine-Learning, Angular,IoT </p>
-                </div>
-              </div>
-              <div class="project-tile" style="background-image: url('./resources/miniproject.webp');">
-                <h3 class="project-title">Mini projects</h3>
-                <div class="project-info">
-                  <p>I have carried out many other mini projects like Notes Repository(Web application), seminar on HAR using Sensors vs. Video, Seminar on Semantic segmentation</p>
-                </div>
-              </div>
+        <section id="projects" class="fade-in">
+            <div class="section-header">
+                <h2>Projects</h2>
+                <div class="underline"></div>
             </div>
-          </section>
+            <div class="project-grid">
+              
+              <div class="project-card">
+                <div class="project-img" style="background-image: url('./resources/handpose.jpg');"></div>
+                <div class="project-content">
+                    <h3>Multi-Modal 3D Hand Pose</h3>
+                    <p>Thesis focusing on 3D multi-modal hand pose estimation using acceleration data and video input with MediaPipe.</p>
+                    <div class="tags">
+                        <span>Python</span><span>CNN</span><span>MediaPipe</span>
+                    </div>
+                </div>
+              </div>
+
+              <div class="project-card">
+                <div class="project-img" style="background-image: url('./resources/cnn.jpg');"></div>
+                <div class="project-content">
+                    <h3>CNN Binary Classifier</h3>
+                    <p>A reusable pipeline for binary image classification using TensorFlow and CNNs.</p>
+                    <div class="tags">
+                        <span>TensorFlow</span><span>Deep Learning</span>
+                    </div>
+                </div>
+              </div>
+
+              <div class="project-card">
+                <div class="project-img" style="background-image: url('./resources/multiclass.png');"></div>
+                <div class="project-content">
+                    <h3>Multiclass Classifier + GAN</h3>
+                    <p>Image classification pipeline combined with GANs to generate new images (MNIST/Fashion MNIST) and test model robustness.</p>
+                    <div class="tags">
+                        <span>GAN</span><span>TensorFlow</span>
+                    </div>
+                </div>
+              </div>
+
+              <div class="project-card">
+                <div class="project-img" style="background-image: url('./resources/agriculture.png');"></div>
+                <div class="project-content">
+                    <h3>Precision Agriculture IoT</h3>
+                    <p>IoT device using ESP32 to detect soil moisture and optimize water resource usage.</p>
+                    <div class="tags">
+                        <span>IoT</span><span>Angular</span><span>Cloud</span>
+                    </div>
+                </div>
+              </div>
+
+              <div class="project-card">
+                <div class="project-img" style="background-image: url('./resources/miniproject.webp');"></div>
+                <div class="project-content">
+                    <h3>Mini Projects Repository</h3>
+                    <p>Various smaller projects including a Notes Web App, HAR Seminars, and Semantic Segmentation research.</p>
+                    <div class="tags">
+                        <span>Web</span><span>Research</span>
+                    </div>
+                </div>
+              </div>
+
+            </div>
+        </section>
           
-          <section id="hobbies">
-            <h2>Hobbies</h2>
+        <section id="hobbies" class="alt-bg fade-in">
+            <div class="section-header">
+                <h2>Hobbies</h2>
+                <div class="underline"></div>
+            </div>
             <div class="hobbies-container">
               <div class="hobby-card">
-                <img src="./resources/photography.jpeg" alt="Hobby 1">
+                <div class="hobby-img-container">
+                    <img src="./resources/photography.jpeg" alt="Photography">
+                </div>
                 <h3>Photography</h3>
-                <p><a href="https://www.instagram.com/rk_arasur/">Click here</a>to check some of my best photos</p>
+                <p>Capturing moments. <a href="https://www.instagram.com/rk_arasur/">Check my best shots.</a></p>
               </div>
               <div class="hobby-card">
-                <img src="./resources/books.jpeg" alt="Hobby 2">
-                <h3>Reading Books</h3>
-                <p>Need some recommendations??here are my top 3 books: Nothing Ventured(detective series), Alchemist and The Book Theif.</p>
+                <div class="hobby-img-container">
+                    <img src="./resources/books.jpeg" alt="Reading">
+                </div>
+                <h3>Reading</h3>
+                <p>Top picks: <em>Nothing Ventured</em>, <em>The Alchemist</em>, <em>The Book Thief</em>.</p>
               </div>
               <div class="hobby-card">
-                <img src="./resources/chess.jpg" alt="Hobby 3">
+                <div class="hobby-img-container">
+                    <img src="./resources/chess.jpg" alt="Chess">
+                </div>
                 <h3>Chess</h3>
-                <p>Love to play chess, currently 1200 ELO. send a challenge <a href="https://www.chess.com/member/raauu4">here.</a></p>
+                <p>1200 ELO. <a href="https://www.chess.com/member/raauu4">Challenge me here.</a></p>
               </div>
-              <!-- Add more hobby cards as needed -->
             </div>
-          </section>
+        </section>
           
     </main>
     <footer>
-        <p>© 2025 | Ravikiran Arasur</p>
+        <p>&copy; 2025 Ravikiran Arasur | Built with <i class="fas fa-code"></i> and <i class="fas fa-heart"></i></p>
     </footer>
     <script src="scripts.js"></script>
 </body>
