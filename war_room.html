@@ -9,11 +9,16 @@
 <body>
 
     <div id="gate">
-        <h1 style="color: var(--neon); text-shadow: 0 0 10px var(--neon);">WAR ROOM ACCESS</h1>
-        <input type="password" id="password" placeholder="ENTER PASSWORD" onkeyup="checkPass(event)">
-        <input type="text" id="apiUrl" placeholder="PASTE GOOGLE SCRIPT URL HERE" style="margin-top: 15px; width: 300px; font-size: 0.8rem;">
-        <p style="color: #666; margin-top: 20px;">(Hint: warroom)</p>
-    </div>
+    <h1 style="color: var(--neon); text-shadow: 0 0 10px var(--neon);">WAR ROOM ACCESS</h1>
+    
+    <input type="password" id="password" placeholder="ENTER PASSWORD" onkeyup="checkPass(event)" style="margin-bottom: 15px;">
+    
+    <input type="text" id="apiUrl" placeholder="OPTIONAL: GOOGLE SCRIPT URL" style="width: 300px; font-size: 0.8rem; margin-bottom: 10px;">
+    
+    <button onclick="triggerLogin()" style="background: var(--accent); color: white; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; margin-top: 10px;">ENTER</button>
+
+    <p style="color: #666; margin-top: 20px;">(Hint: warroom)</p>
+</div>
 
     <div class="container" id="dashboard">
         <header>

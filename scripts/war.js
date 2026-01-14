@@ -7,24 +7,39 @@
     let currentMode = 'WAR';
 
     // --- 1. SECURITY & SYNC ---
+
+    // Helper to allow clicking the button manually
+    function triggerLogin() {
+        const mockEvent = { key: 'Enter' }; // Fake an 'Enter' keypress
+        checkPass(mockEvent);
+    }
+
     function checkPass(e) {
+        // Only run if key is 'Enter' or if it was called manually
         if (e.key === 'Enter' || e.type === 'click') {
             const pass = document.getElementById('password').value;
             const urlInput = document.getElementById('apiUrl').value;
             
             if (pass === 'warroom') {
-                // Save URL if provided
-                if(urlInput) {
-                    API_URL = urlInput;
+                // 1. Save API URL if the user typed one in
+                if(urlInput && urlInput.trim() !== "") {
+                    API_URL = urlInput.trim();
                     localStorage.setItem(API_KEY_STORAGE, API_URL);
                 }
                 
+                // 2. Hide Gate, Show Dashboard
                 document.getElementById('gate').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 
-                // Initial Cloud Sync
-                if(API_URL) syncFromCloud();
-                else loadLocalData(); // Fallback
+                // 3. Start Data Load
+                if(API_URL) {
+                    syncFromCloud(); // Try to get data from Google Sheet
+                } else {
+                    loadLocalData(); // Just load from browser storage
+                }
+            } else {
+                // Optional: visual feedback for wrong password
+                document.getElementById('password').style.borderColor = 'red';
             }
         }
     }
@@ -141,6 +156,7 @@
             timestamp: Date.now(),
             role: document.getElementById('app_role').value,
             company: document.getElementById('app_company').value,
+            link: document.getElementById('app_link').value,
             type: document.getElementById('app_type').value,
             location: document.getElementById('app_loc').value,
             visa: document.getElementById('app_visa').value,
