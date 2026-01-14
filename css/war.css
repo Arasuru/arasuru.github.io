@@ -1,0 +1,120 @@
+:root {
+        --bg: #0d1117;
+        --panel: #161b22;
+        --border: #30363d;
+        --text: #c9d1d9;
+        --accent: #238636; /* GitHub Green */
+        --danger: #da3633;
+        --warn: #d29922;
+        --neon: #00ff41; /* Hacker Green */
+    }
+
+* { 
+    box-sizing: border-box; 
+    font-family: 'Courier New', 
+    monospace; 
+    }
+        
+ body{
+        background-color: var(--bg);
+        color: var(--text);
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+    }
+
+        /* --- SECURITY GATE --- */
+#gate {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: black; z-index: 9999;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+}
+#gate input {
+    background: #111; border: 1px solid var(--neon); color: var(--neon);
+    padding: 10px; font-size: 1.2rem; outline: none; text-align: center;
+}
+
+        /* --- LAYOUT --- */
+.container { 
+    max-width: 1200px; 
+    margin: 0 auto; 
+    display: none; /* Hidden by default */ }
+        
+header {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    border-bottom: 1px solid var(--border); 
+    padding-bottom: 20px; 
+    margin-bottom: 20px;
+}
+        
+.clock-box { text-align: right; }
+.clock-box .time { font-size: 1.5rem; color: var(--neon); font-weight: bold; }
+.clock-box .label { font-size: 0.8rem; color: #8b949e; }
+
+/* --- TABS --- */
+.tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+.tab-btn {
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    padding: 10px 20px; cursor: pointer; transition: 0.2s;
+}
+.tab-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+/* --- SECTIONS --- */
+.section { display: none; animation: fadeIn 0.3s; }
+
+.section.active { display: block; }
+        
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+ /* --- FORMS & INPUTS --- */
+.panel {
+    background: var(--panel); border: 1px solid var(--border);
+    padding: 20px; border-radius: 6px; margin-bottom: 20px;
+}
+        
+.form-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px; margin-bottom: 15px;
+    }
+
+label { display: block; font-size: 0.8rem; margin-bottom: 5px; color: #8b949e; }
+        
+input, select {
+    width: 100%; background: #0d1117; border: 1px solid #30363d;
+    color: white; padding: 8px; border-radius: 4px;
+}
+
+button.action-btn {
+    background: var(--accent); color: white; border: none;
+    padding: 10px 20px; cursor: pointer; font-weight: bold; width: 100%;
+}
+
+button.action-btn:hover { opacity: 0.9; }
+
+/* --- BLOCK 1 SPECIFIC --- */
+.status-select { font-weight: bold; }
+.status-green { color: var(--neon); }
+.status-yellow { color: var(--warn); }
+.status-red { color: var(--danger); }
+
+.progress-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;
+}
+.topic-card {
+    background: #0d1117; border: 1px solid var(--border); padding: 10px;
+    text-align: center; border-radius: 4px;
+}
+.topic-name { font-size: 0.8rem; margin-bottom: 5px; }
+.progress-bar {
+    height: 6px; background: #333; border-radius: 3px; overflow: hidden;
+}
+.progress-fill { height: 100%; background: var(--accent); width: 0%; }
+
+        /* --- TABLE --- */
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); }
+th { color: #8b949e; }
+.tag { padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; border: 1px solid var(--border); }

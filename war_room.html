@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAR ROOM</title>
+    <link rel="stylesheet" href="./css/war.css">
+</head>
+<body>
+
+    <div id="gate">
+        <h1 style="color: var(--neon); text-shadow: 0 0 10px var(--neon);">WAR ROOM ACCESS</h1>
+        <input type="password" id="password" placeholder="ENTER PASSWORD" onkeyup="checkPass(event)">
+        <input type="text" id="apiUrl" placeholder="PASTE GOOGLE SCRIPT URL HERE" style="margin-top: 15px; width: 300px; font-size: 0.8rem;">
+        <p style="color: #666; margin-top: 20px;">(Hint: warroom)</p>
+    </div>
+
+    <div class="container" id="dashboard">
+        <header>
+            <div>
+                <h1>WAR ROOM</h1>
+                <p style="color: #8b949e;">PROTOCOL: PRODUCTION LINE</p>
+            </div>
+            <div class="clock-box">
+                <div class="label">GERMANY (CET)</div>
+                <div class="time" id="germanClock">00:00:00</div>
+                <div class="label" id="timeStatus">OFF DUTY</div>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('gym')">BLOCK 1: GYM</button>
+            <button class="tab-btn" onclick="switchTab('hunt')">BLOCK 2: HUNT</button>
+            <button class="tab-btn" onclick="switchTab('meta')">MVP & META</button>
+        </div>
+
+        <div id="gym" class="section active">
+            
+            <div class="panel">
+                <h3 style="margin-top:0; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+                    <span style="color: var(--accent);">A.</span> Daily Problem Tracker
+                </h3>
+                
+                <div class="form-grid">
+                    <div>
+                        <label>Problem Name</label>
+                        <input type="text" id="lc_name" placeholder="e.g. Valid Anagram">
+                    </div>
+                    <div>
+                        <label>Topic</label>
+                        <select id="lc_topic">
+                            <option value="Arrays">Arrays & Hashing</option>
+                            <option value="TwoPointers">Two Pointers</option>
+                            <option value="SlidingWindow">Sliding Window</option>
+                            <option value="Stack">Stack</option>
+                            <option value="BinarySearch">Binary Search</option>
+                            <option value="LinkedList">Linked List</option>
+                            <option value="Trees">Trees</option>
+                            <option value="Heap">Heap / PQ</option>
+                            <option value="Backtracking">Backtracking</option>
+                            <option value="Graphs">Graphs</option>
+                            <option value="DP">Dynamic Programming</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Difficulty</label>
+                        <select id="lc_diff">
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Status (Honesty Protocol)</label>
+                        <select id="lc_status" class="status-select">
+                            <option value="Green">✅ Solved (Own)</option>
+                            <option value="Yellow">🟡 Solved (Hint)</option>
+                            <option value="Red">🔴 Watched Solution</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Time Spent (Mins)</label>
+                        <input type="number" id="lc_time" placeholder="20">
+                    </div>
+                </div>
+
+                <div style="background: #000; padding: 10px; margin-bottom: 15px; border: 1px dashed #30363d; display: flex; gap: 20px;">
+                    <label style="display: flex; align-items: center; gap: 5px; color: var(--text); cursor: pointer;">
+                        <input type="checkbox" id="lc_rule20" style="width: auto;"> 
+                        ⏱️ Stopped attempting at 20m?
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 5px; color: var(--text); cursor: pointer;">
+                        <input type="checkbox" id="lc_rule12" style="width: auto;"> 
+                        ⛔ Stopped coding at 12 PM?
+                    </label>
+                </div>
+
+                <button class="action-btn" onclick="logGym()">LOG PROBLEM</button>
+            </div>
+
+            <div class="panel">
+                <h3 style="margin-top:0; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+                    <span style="color: var(--accent);">B.</span> NeetCode 150 Progress
+                </h3>
+                <div class="progress-grid" id="progressMap">
+                    </div>
+            </div>
+
+            <div class="panel">
+                <h3>Recent Activity</h3>
+                <table id="gymTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Problem</th>
+                            <th>Topic</th>
+                            <th>Status</th>
+                            <th>Rules</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="hunt" class="section">
+    
+    <div class="panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="margin:0;"><span style="color: var(--accent);">B.</span> Weekly Scorecard</h3>
+            <div style="font-size: 0.8rem; color: #8b949e;">LAST 7 DAYS ACTIVITY</div>
+        </div>
+        
+        <div class="progress-grid" style="grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));">
+            <div class="topic-card">
+                <div style="font-size: 2rem; font-weight: bold; color: white;" id="stat_total">0</div>
+                <div class="topic-name">APPS SENT</div>
+            </div>
+            <div class="topic-card">
+                <div style="font-size: 2rem; font-weight: bold; color: gold;" id="stat_dream">0</div>
+                <div class="topic-name">DREAM APPS</div>
+            </div>
+            <div class="topic-card">
+                <div style="font-size: 2rem; font-weight: bold; color: var(--neon);" id="stat_interview">0%</div>
+                <div class="topic-name">INTERVIEW RATE</div>
+            </div>
+            <div class="topic-card">
+                <div style="font-size: 2rem; font-weight: bold; color: var(--danger);" id="stat_reject">0</div>
+                <div class="topic-name">REJECTIONS</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h3 style="margin-top:0; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+            Log New Application
+        </h3>
+        
+        <div style="background: #111; padding: 10px; margin-bottom: 20px; border: 1px dashed #30363d; display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
+            <label style="color: white; font-weight: bold;">TIME DISCIPLINE:</label>
+            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                <input type="checkbox" id="app_start2pm" style="width:auto;"> Started 2PM?
+            </label>
+            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                <input type="checkbox" id="app_end4pm" style="width:auto;"> Finished 4PM?
+            </label>
+            <input type="number" id="app_duration" placeholder="Mins" style="width: 80px; padding: 5px;">
+        </div>
+
+        <div class="form-grid">
+            <div>
+                <label>Role / Title</label>
+                <input type="text" id="app_role" placeholder="e.g. Python Dev">
+            </div>
+            <div>
+                <label>Company</label>
+                <input type="text" id="app_company" placeholder="e.g. Siemens">
+            </div>
+            <div>
+                <label>Job Link</label>
+                <input type="text" id="app_link" placeholder="e.g. https://linkedin.com/jobs/view/...">
+            </div>
+            <div>
+                <label>Job Type</label>
+                <select id="app_type" style="color: white;">
+                    <option value="Survival">Survival (Bulk)</option>
+                    <option value="Dream" style="color: gold; font-weight: bold;">🌟 DREAM (Tailored)</option>
+                </select>
+            </div>
+            <div>
+                <label>Location</label>
+                <input type="text" id="app_loc" placeholder="e.g. Berlin, Remote">
+            </div>
+            <div>
+                <label>Visa Sponsorship?</label>
+                <select id="app_visa">
+                    <option value="Unknown">Unknown</option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            <div>
+                <label>Source</label>
+                <select id="app_source">
+                    <option value="LinkedIn">LinkedIn</option>
+                    <option value="Indeed">Indeed</option>
+                    <option value="CompanySite">Company Site</option>
+                    <option value="Referral">Referral</option>
+                </select>
+            </div>
+            <div>
+                <label>Follow-up Date</label>
+                <input type="date" id="app_followup">
+            </div>
+            <div>
+                <label>Current Status</label>
+                <select id="app_status">
+                    <option value="Applied">Applied</option>
+                    <option value="Interview" style="color: var(--neon);">Interview</option>
+                    <option value="Rejected" style="color: var(--danger);">Rejected</option>
+                </select>
+            </div>
+        </div>
+        <button class="action-btn" onclick="logApp()">LOG APPLICATION</button>
+    </div>
+
+    <div class="panel">
+        <h3>Application History</h3>
+        <table id="appTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Role @ Company</th>
+                    <th>Type</th>
+                    <th>Visa</th>
+                    <th>Status</th>
+                    <th>Follow Up</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+    </div>
+    </div>
+
+    <div id="meta" class="section">
+    
+    <div class="panel">
+        <h3 style="margin-top:0; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
+            <span style="color: var(--accent);">C.</span> Engagement Protocol
+        </h3>
+        <div class="progress-grid" style="grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center;">
+            <div style="background: #111; padding: 20px; border: 1px solid var(--accent);">
+                <div style="font-size: 3rem; font-weight: bold; color: var(--neon);" id="streak_current">0</div>
+                <div style="color: #888; font-size: 0.8rem;">CURRENT STREAK</div>
+            </div>
+            <div style="background: #111; padding: 20px; border: 1px solid #333;">
+                <div style="font-size: 3rem; font-weight: bold; color: white;" id="streak_best">0</div>
+                <div style="color: #888; font-size: 0.8rem;">LONGEST STREAK</div>
+            </div>
+            <div style="background: #111; padding: 20px; border: 1px solid var(--danger);">
+                <div style="font-size: 3rem; font-weight: bold; color: var(--danger);" id="streak_zero">0</div>
+                <div style="color: #888; font-size: 0.8rem;">ZERO DAYS (MONTH)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3>Today's Mission Status</h3>
+            <button id="modeToggle" onclick="toggleMode()" style="background: #333; border: 1px solid #555; color: white; padding: 5px 15px; cursor: pointer; border-radius: 20px;">
+                MODE: 🔥 WAR
+            </button>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span id="label_gym">GYM (Target: 2)</span>
+                <span id="score_gym" style="font-weight: bold;">0 / 2</span>
+            </div>
+            <div class="progress-bar" style="height: 15px; background: #222; margin-bottom: 15px;">
+                <div id="bar_gym" class="progress-fill" style="width: 0%; background: var(--warn);"></div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span id="label_hunt">HUNT (Target: 5)</span>
+                <span id="score_hunt" style="font-weight: bold;">0 / 5</span>
+            </div>
+            <div class="progress-bar" style="height: 15px; background: #222;">
+                <div id="bar_hunt" class="progress-fill" style="width: 0%; background: var(--warn);"></div>
+            </div>
+        </div>
+
+        <div id="day_result" style="text-align: center; padding: 15px; background: #111; border: 1px dashed #444; color: #888; font-weight: bold;">
+            MISSION PENDING...
+        </div>
+    </div>
+
+    <div class="panel">
+        <h3>Confidence Log (Weekly)</h3>
+        <p style="font-size: 0.8rem; color: #888;">"What improved? What sucked but I did anyway?"</p>
+        <textarea id="meta_log" style="width: 100%; height: 100px; background: #0d1117; border: 1px solid #30363d; color: white; padding: 10px;" placeholder="Log your thoughts here..."></textarea>
+        <button class="action-btn" onclick="saveMetaLog()" style="margin-top: 10px;">SAVE LOG</button>
+        <div id="saved_logs" style="margin-top: 20px; font-size: 0.85rem; color: #ccc;"></div>
+    </div>
+    <div class="panel" style="border: 1px solid var(--danger); margin-top: 20px;">
+        <h3 style="color: var(--danger); margin-top: 0;">Danger Zone</h3>
+        <p style="font-size: 0.8rem; color: #888;">Clear all dummy data and reset for the real war.</p>
+        <button class="action-btn" onclick="clearWarData()" style="background: var(--danger);">⚠️ RESET ALL DATA</button>
+    </div>
+    </div>
+</div>
+
+    <script src="./scripts/war.js"></script>
+</body>
+</html>
