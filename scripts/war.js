@@ -299,9 +299,43 @@
         const berlin = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Berlin"}));
         document.getElementById('germanClock').innerText = berlin.toLocaleTimeString();
         const h = berlin.getHours();
-        const statusEl = document.getElementById('timeStatus');
+        const statusEl = document.getElementById('timeStatus1');
         if(statusEl.innerText.includes("SYNCING")) return; // Don't overwrite sync msg
         if (h >= 9 && h < 12) { statusEl.innerText = "⚡ PRIME TIME"; statusEl.style.color = "var(--neon)"; }
         else if (h >= 12 && h < 18) { statusEl.innerText = "🟢 STANDARD"; statusEl.style.color = "white"; }
         else { statusEl.innerText = "💤 SLEEPING"; statusEl.style.color = "#666"; }
+    }, 1000);
+
+    setInterval(() => {
+        const now = new Date();
+        const indian = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+        document.getElementById('indianClock').innerText = indian.toLocaleTimeString();
+        const h = indian.getHours();
+        const statusE2 = document.getElementById('timeStatus2');
+        if (h >= 9 && h < 12) { statusE2.innerText = "⚡ PRIME TIME"; statusE2.style.color = "var(--neon)"; }
+        else if (h >= 12 && h < 18) { statusE2.innerText = "🟢 STANDARD"; statusE2.style.color = "white"; }
+        else { statusE2.innerText = "💤 SLEEPING"; statusE2.style.color = "#666"; }
+    }, 1000);
+
+    setInterval(() => {
+        const now = new Date();
+        const australia = new Date(now.toLocaleString("en-US", {timeZone: "Australia/Sydney"}));
+        document.getElementById('australiaClock').innerText = australia.toLocaleTimeString();
+        const h = australia.getHours();
+        const statusE3 = document.getElementById('timeStatus3');
+        if (h >= 9 && h < 12) { statusE3.innerText = "⚡ PRIME TIME"; statusE3.style.color = "var(--neon)"; }
+        else if (h >= 12 && h < 18) { statusE3.innerText = "🟢 STANDARD"; statusE3.style.color = "white"; }
+        else { statusE3.innerText = "💤 SLEEPING"; statusE3.style.color = "#666"; }
+    }, 1000);
+
+    setInterval(() => {
+        const now = new Date();
+        const uae = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Dubai"}));
+        document.getElementById('uaeClock').innerText = uae.toLocaleTimeString();
+        const h = uae.getHours();
+        const statusE4 = document.getElementById('timeStatus4');
+        if(statusE4.innerText.includes("SYNCING")) return; // Don't overwrite sync msg
+        if (h >= 9 && h < 12) { statusE4.innerText = "⚡ PRIME TIME"; statusE4.style.color = "var(--neon)"; }
+        else if (h >= 12 && h < 18) { statusE4.innerText = "🟢 STANDARD"; statusE4.style.color = "white"; }
+        else { statusE4.innerText = "💤 SLEEPING"; statusE4.style.color = "#666"; }
     }, 1000);
