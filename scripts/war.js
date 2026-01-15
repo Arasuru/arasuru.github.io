@@ -3,6 +3,8 @@
     const APP_KEY = 'war_app_logs';
     const META_KEY = 'war_meta_logs';
     const API_KEY_STORAGE = 'war_api_url';
+    const LIB_KEY = 'war_library';
+    const CALENDAR_KEY = 'war_calendar_tasks';
     let API_URL = localStorage.getItem(API_KEY_STORAGE) || "";
     let currentMode = 'WAR';
 
@@ -59,7 +61,7 @@
             localStorage.setItem(GYM_KEY, JSON.stringify(data.gym));
             localStorage.setItem(APP_KEY, JSON.stringify(data.hunt));
             localStorage.setItem(META_KEY, JSON.stringify(data.meta));
-            
+            localStorage.setItem(LIB_KEY, JSON.stringify(data.library));
             loadLocalData(); // Render to UI
             statusEl.innerText = "✅ DATA SYNCED";
             setTimeout(() => statusEl.innerText = originalText, 2000);
@@ -244,6 +246,12 @@
         loadGymData();
         loadAppData();
         renderMetaLogs();
+        renderLibrary();
+        if(document.getElementById('cal_grid')) {
+             // Only run if Calendar HTML exists
+             initCalendar(); 
+             renderTaskList();
+        }
         checkDailyProgress();
         calculateStreaks();
     }
@@ -289,6 +297,7 @@
     function switchTab(tabId) {
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        if(tabId === 'calendar') setTimeout(initCalendar, 100); // Small delay to ensure visibility
         document.getElementById(tabId).classList.add('active');
         event.target.classList.add('active');
     }
@@ -317,3 +326,203 @@
         else if (h >= 12 && h < 18) { statusE4.innerText = "🟢 STANDARD"; statusE4.style.color = "white"; }
         else { statusE4.innerText = "💤 SLEEPING"; statusE4.style.color = "#666"; }
     }, 1000);
+
+    // === BLOCK 4: CALENDAR LOGIC ===
+    let currentDate = new Date(); // Tracks the month we are viewing
+    let selectedDateKey = null;   // Tracks which day is clicked (YYYY-MM-DD)
+
+    function getCalendarData() { return JSON.parse(localStorage.getItem(CALENDAR_KEY)) || {}; }
+
+    function initCalendar() {
+        renderCalendarGrid();
+        // Select today by default
+        selectDate(new Date().toISOString().split('T')[0]);
+    }
+
+    function changeMonth(delta) {
+        currentDate.setMonth(currentDate.getMonth() + delta);
+        renderCalendarGrid();
+    }
+
+    function renderCalendarGrid() {
+        const grid = document.getElementById('cal_grid');
+        const monthDisplay = document.getElementById('cal_month_year');
+        const tasks = getCalendarData();
+
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        
+        // Update Header
+        const monthNames = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"];
+        monthDisplay.innerText = `${monthNames[month]} ${year}`;
+
+        grid.innerHTML = '';
+
+        // Header Row (Mon, Tue...)
+        const days = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+        days.forEach(d => grid.innerHTML += `<div style="text-align:center; font-size:0.8rem; color:#888; padding-bottom:5px;">${d}</div>`);
+
+        // Logic to draw days
+        const firstDay = new Date(year, month, 1).getDay(); // 0 = Sunday
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Empty slots before 1st of month
+        for(let i=0; i<firstDay; i++) {
+            grid.innerHTML += `<div></div>`;
+        }
+
+        // Draw Days
+        const todayKey = new Date().toISOString().split('T')[0];
+        
+        for(let d=1; d<=daysInMonth; d++) {
+            // Create Key: YYYY-MM-DD (Manual formatting to avoid timezone issues)
+            const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            
+            const dayTasks = tasks[dateKey] || [];
+            const hasTasks = dayTasks.length > 0;
+            const isToday = dateKey === todayKey;
+            const isSelected = dateKey === selectedDateKey;
+
+            let dotHtml = hasTasks ? `<div class="cal-dot"></div>` : '';
+            
+            const div = document.createElement('div');
+            div.className = `cal-day ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''}`;
+            div.innerHTML = `<span style="font-size:0.9rem; font-weight:bold;">${d}</span> ${dotHtml}`;
+            div.onclick = () => selectDate(dateKey);
+            
+            grid.appendChild(div);
+        }
+    }
+
+    function selectDate(dateKey) {
+        selectedDateKey = dateKey;
+        renderCalendarGrid(); // Re-render to show selection highlight
+        renderTaskList();
+    }
+
+    function renderTaskList() {
+        const list = document.getElementById('task_list');
+        const display = document.getElementById('selected_date_display');
+        const tasks = getCalendarData();
+        const dayTasks = tasks[selectedDateKey] || [];
+
+        // Format Header Date
+        const dateObj = new Date(selectedDateKey);
+        display.innerText = dateObj.toDateString();
+
+        list.innerHTML = '';
+        if(dayTasks.length === 0) {
+            list.innerHTML = '<div style="color:#666; font-style:italic; padding:10px;">No missions for this day.</div>';
+            return;
+        }
+
+        dayTasks.forEach((task, index) => {
+            const style = task.done ? 'text-decoration: line-through; color: #555;' : 'color: white;';
+            const check = task.done ? '☑️' : '⬜';
+            
+            list.innerHTML += `
+                <div style="background: #111; padding: 8px; border-bottom: 1px solid #333; display: flex; align-items: center; justify-content: space-between;">
+                    <div onclick="toggleTask(${index})" style="cursor: pointer; flex: 1;">
+                        <span style="margin-right: 5px;">${check}</span>
+                        <span style="${style}">${task.text}</span>
+                    </div>
+                    <button onclick="deleteTask(${index})" style="background:none; border:none; color:#444; cursor:pointer;">&times;</button>
+                </div>
+            `;
+        });
+    }
+
+    function addTask() {
+        const input = document.getElementById('new_task_input');
+        const text = input.value.trim();
+        if(!text || !selectedDateKey) return;
+
+        const data = getCalendarData();
+        if(!data[selectedDateKey]) data[selectedDateKey] = [];
+        
+        data[selectedDateKey].push({ text: text, done: false });
+        localStorage.setItem(CALENDAR_KEY, JSON.stringify(data));
+        
+        // Sync Cloud
+        if(typeof sendToCloud === 'function') sendToCloud('calendar', { date: selectedDateKey, tasks: data[selectedDateKey] });
+
+        input.value = '';
+        renderTaskList();
+        renderCalendarGrid(); // Update dots
+    }
+
+    function toggleTask(index) {
+        const data = getCalendarData();
+        data[selectedDateKey][index].done = !data[selectedDateKey][index].done;
+        localStorage.setItem(CALENDAR_KEY, JSON.stringify(data));
+        renderTaskList();
+    }
+
+    function deleteTask(index) {
+        const data = getCalendarData();
+        data[selectedDateKey].splice(index, 1);
+        localStorage.setItem(CALENDAR_KEY, JSON.stringify(data));
+        renderTaskList();
+        renderCalendarGrid();
+    }
+
+    function handleTaskEnter(e) {
+        if(e.key === 'Enter') addTask();
+    }
+
+    // === LIBRARY LOGIC ===
+   
+    
+    function addLibraryItem() {
+        const title = document.getElementById('lib_title').value;
+        const url = document.getElementById('lib_url').value;
+        const tag = document.getElementById('lib_tag').value;
+        if(!title || !url) return;
+
+        const entry = { title, url, tag }; // Create entry object
+
+        // 1. Save Local
+        const data = JSON.parse(localStorage.getItem(LIB_KEY)) || [];
+        data.unshift(entry);
+        localStorage.setItem(LIB_KEY, JSON.stringify(data));
+        
+        // 2. Send to Cloud
+        sendToCloud('library', entry); // <--- SYNC HAPPENS HERE
+        
+        // 3. Reset UI
+        document.getElementById('lib_title').value = '';
+        document.getElementById('lib_url').value = '';
+        renderLibrary();
+    }
+
+    function renderLibrary() {
+        // 1. Read from Local Cache (which was updated by Cloud Sync)
+        const data = JSON.parse(localStorage.getItem(LIB_KEY)) || [];
+        const list = document.getElementById('library_list');
+        if(!list) return;
+
+        // 2. Handle Empty State
+        if(data.length === 0) {
+            list.innerHTML = '<div style="color:#666; font-style:italic; grid-column: 1/-1;">Library is empty. Add a resource to sync it to the cloud.</div>';
+            return;
+        }
+
+        // 3. Generate Cards
+        list.innerHTML = data.map(item => `
+            <div style="background:#111; padding:15px; border:1px solid #333; font-size:0.9rem; border-radius:4px; transition: 0.2s hover;">
+                <span style="background: #222; color: #ccc; padding: 2px 8px; font-size: 0.7rem; border-radius: 10px; border: 1px solid #444; display: inline-block; margin-bottom: 8px;">
+                    ${item.tag}
+                </span>
+                
+                <div style="margin-bottom: 5px;">
+                    <a href="${item.url}" target="_blank" style="color: var(--neon); text-decoration: none; font-weight: bold; font-size: 1rem;">
+                        ${item.title} 🔗
+                    </a>
+                </div>
+
+                <div style="color: #666; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    ${item.url}
+                </div>
+            </div>
+        `).join('');
+    }

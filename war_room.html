@@ -42,6 +42,7 @@
             <button class="tab-btn active" onclick="switchTab('gym')">BLOCK 1: GYM</button>
             <button class="tab-btn" onclick="switchTab('hunt')">BLOCK 2: HUNT</button>
             <button class="tab-btn" onclick="switchTab('meta')">MVP & META</button>
+            <button class="tab-btn" onclick="switchTab('calendar')">CALENDAR</button>
         </div>
 
         <div id="gym" class="section active">
@@ -315,6 +316,47 @@
         <div id="saved_logs" style="margin-top: 20px; font-size: 0.85rem; color: #ccc;"></div>
     </div>
     </div>
+
+    #calendar section
+    <div id="calendar" class="section">
+    <div class="panel" style="display: flex; gap: 20px; flex-wrap: wrap;">
+        
+        <div style="flex: 2; min-width: 300px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <button onclick="changeMonth(-1)" class="action-btn" style="width: auto; padding: 5px 15px;">&lt;</button>
+                <h3 id="cal_month_year" style="margin: 0; color: var(--neon);">MONTH YEAR</h3>
+                <button onclick="changeMonth(1)" class="action-btn" style="width: auto; padding: 5px 15px;">&gt;</button>
+            </div>
+            
+            <div id="cal_grid" class="calendar-grid">
+                </div>
+        </div>
+
+        <div style="flex: 1; min-width: 250px; background: #0d1117; border: 1px solid var(--border); padding: 15px; border-radius: 4px;">
+            <h4 id="selected_date_display" style="margin-top: 0; color: var(--accent); border-bottom: 1px solid #333; padding-bottom: 10px;">Select a Date</h4>
+            
+            <div style="display: flex; gap: 5px; margin-bottom: 15px;">
+                <input type="text" id="new_task_input" placeholder="Add task..." onkeypress="handleTaskEnter(event)">
+                <button onclick="addTask()" class="action-btn" style="width: auto;">+</button>
+            </div>
+
+            <div id="task_list" style="display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto;">
+                <div style="color: #666; font-style: italic;">No tasks for this day.</div>
+            </div>
+        </div>
+    </div>
+    <div class="panel" style="margin-top: 20px;">
+        <h3>📚 The Library</h3>
+        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+            <input type="text" id="lib_title" placeholder="Title (e.g. NeetCode Roadmap)" style="flex:1">
+            <input type="text" id="lib_url" placeholder="URL" style="flex:2">
+            <select id="lib_tag" style="width:100px"><option>Tool</option><option>Read</option><option>Video</option></select>
+            <button class="action-btn" onclick="addLibraryItem()" style="width:auto">SAVE</button>
+        </div>
+        <div id="library_list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;"></div>
+    </div>
+    </div>
+
 </div>
 
     <script src="./scripts/war.js"></script>
