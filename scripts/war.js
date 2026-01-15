@@ -8,6 +8,18 @@
     let API_URL = localStorage.getItem(API_KEY_STORAGE) || "";
     let currentMode = 'WAR';
 
+    // helper function
+    function getLocalArray(key) {
+    try {
+        const raw = localStorage.getItem(key);
+        if (!raw || raw === "undefined") return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return [];
+    }
+}
+
     // --- 1. SECURITY & SYNC ---
 
     // Helper to allow clicking the button manually
@@ -37,7 +49,8 @@
                 if(API_URL) {
                     syncFromCloud(); // Try to get data from Google Sheet
                 } else {
-                    loadLocalData(); // Just load from browser storage
+                    loadLocalData(); 
+                    alert("cloud data failed, loading from local")// Just load from browser storage
                 }
             } else {
                 // Optional: visual feedback for wrong password
@@ -63,9 +76,7 @@
             localStorage.setItem(META_KEY, JSON.stringify(data.meta));
             localStorage.setItem(LIB_KEY, JSON.stringify(data.library));
             loadLocalData(); // Render to UI
-            statusEl.innerText = "✅ DATA SYNCED";
-            setTimeout(() => statusEl.innerText = originalText, 2000);
-            
+            statusEl.innerText = "✅ DATA SYNCED";           
         } catch (err) {
             console.error(err);
             statusEl.innerText = "❌ SYNC FAILED";
@@ -415,7 +426,6 @@
             list.innerHTML = '<div style="color:#666; font-style:italic; padding:10px;">No missions for this day.</div>';
             return;
         }
-
         dayTasks.forEach((task, index) => {
             const style = task.done ? 'text-decoration: line-through; color: #555;' : 'color: white;';
             const check = task.done ? '☑️' : '⬜';
@@ -482,7 +492,7 @@
         const entry = { title, url, tag }; // Create entry object
 
         // 1. Save Local
-        const data = JSON.parse(localStorage.getItem(LIB_KEY)) || [];
+        const data = getLocalArray(LIB_KEY);
         data.unshift(entry);
         localStorage.setItem(LIB_KEY, JSON.stringify(data));
         
@@ -497,7 +507,7 @@
 
     function renderLibrary() {
         // 1. Read from Local Cache (which was updated by Cloud Sync)
-        const data = JSON.parse(localStorage.getItem(LIB_KEY)) || [];
+        const data = getLocalArray(LIB_KEY);
         const list = document.getElementById('library_list');
         if(!list) return;
 
