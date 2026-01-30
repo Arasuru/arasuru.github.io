@@ -8,41 +8,50 @@
     <link rel="apple-touch-icon" sizes="180x180" href="./resources/favicon_io/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="./resources/favicon_io/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="./resources/favicon_io/favicon-16x16.png">
-<link rel="manifest" href="./resources/favicon_io/site.webmanifest">
+    <link rel="manifest" href="./resources/favicon_io/site.webmanifest">
 </head>
-<body>
+<body class="theme-dark"> <div id="gate">
+        <h1 class="gate-title">WAR ROOM ACCESS</h1>
+        
+        <input type="password" id="password" placeholder="ENTER PASSWORD" onkeyup="checkPass(event)" class="gate-input mb-15">
+        
+        <input type="text" id="apiUrl" placeholder="OPTIONAL: GOOGLE SCRIPT URL" class="gate-input-url mb-10">
+        
+        <button onclick="triggerLogin()" class="gate-btn mt-10">ENTER</button>
 
-    <div id="gate">
-    <h1 style="color: var(--neon); text-shadow: 0 0 10px var(--neon);">WAR ROOM ACCESS</h1>
-    
-    <input type="password" id="password" placeholder="ENTER PASSWORD" onkeyup="checkPass(event)" style="margin-bottom: 15px;">
-    
-    <input type="text" id="apiUrl" placeholder="OPTIONAL: GOOGLE SCRIPT URL" style="width: 300px; font-size: 0.8rem; margin-bottom: 10px;">
-    
-    <button onclick="triggerLogin()" style="background: var(--accent); color: white; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; margin-top: 10px;">ENTER</button>
-
-    <p style="color: #666; margin-top: 20px;">(Hint: warroom)</p>
-</div>
+        <p class="gate-hint">(Hint: warroom)</p>
+    </div>
 
     <div class="container" id="dashboard">
         <header>
             <div>
                 <h1>WAR ROOM</h1>
-                <p style="color: #8b949e;">PROTOCOL: PRODUCTION LINE</p>
+                <p class="subtitle">PROTOCOL: PRODUCTION LINE</p>
             </div>
-            <div class="clock-box">
-                <div class="label">GERMANY (CET)</div>
-                <div class="time" id="germanClock">00:00:00</div>
-                <div class="label" id="timeStatus1">OFF DUTY</div>
-            </div>
-            <div class="clock-box">
-                <div class="label">UAE (GST)</div>
-                <div class="time" id="uaeClock">00:00:00</div>
-                <div class="label" id="timeStatus3">OFF DUTY</div>
-            </div>
-            <div class="clock-box">
-                <div class="label">Cloud SYNC</div>
-                <div class="label" id="timeStatus">Unknown</div>
+            
+            <div class="header-controls">
+                <div class="theme-switcher">
+                    <button onclick="setTheme('theme-dark')" class="theme-btn" title="Dark Mode">🌑</button>
+                    <button onclick="setTheme('theme-light')" class="theme-btn" title="Light Mode">☀️</button>
+                    <button onclick="setTheme('theme-creative')" class="theme-btn" title="Creative Mode">🎨</button>
+                </div>
+
+                <div class="clock-group">
+                    <div class="clock-box">
+                        <div class="label">GERMANY (CET)</div>
+                        <div class="time" id="germanClock">00:00:00</div>
+                        <div class="label" id="timeStatus1">OFF DUTY</div>
+                    </div>
+                    <div class="clock-box">
+                        <div class="label">UAE (GST)</div>
+                        <div class="time" id="uaeClock">00:00:00</div>
+                        <div class="label" id="timeStatus3">OFF DUTY</div>
+                    </div>
+                    <div class="clock-box">
+                        <div class="label">Cloud SYNC</div>
+                        <div class="label" id="timeStatus">Unknown</div>
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -56,8 +65,8 @@
         <div id="gym" class="section active">
             
             <div class="panel">
-                <h3 style="margin-top:0; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-                    <span style="color: var(--accent);">A.</span> Daily Problem Tracker
+                <h3 class="panel-header">
+                    <span class="accent-text">A.</span> Daily Problem Tracker
                 </h3>
                 
                 <div class="form-grid">
@@ -102,269 +111,257 @@
                         <input type="number" id="lc_time" placeholder="20">
                     </div>
                 </div>
-
-                <div style="background: #000; padding: 10px; margin-bottom: 15px; border: 1px dashed #30363d; display: flex; gap: 20px;">
-                    <label style="display: flex; align-items: center; gap: 5px; color: var(--text); cursor: pointer;">
-                        <input type="checkbox" id="lc_rule20" style="width: auto;"> 
-                        ⏱️ Stopped attempting at 20m?
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 5px; color: var(--text); cursor: pointer;">
-                        <input type="checkbox" id="lc_rule12" style="width: auto;"> 
-                        ⛔ Stopped coding at 12 PM?
-                    </label>
-                </div>
-
                 <button class="action-btn" onclick="logGym()">LOG PROBLEM</button>
             </div>
 
             <div class="panel">
-                <h3 style="margin-top:0; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-                    <span style="color: var(--accent);">B.</span> NeetCode 150 Progress
+                <h3 class="panel-header">
+                    <span class="accent-text">B.</span> NeetCode 150 Progress
                 </h3>
-                <div class="progress-grid" id="progressMap">
-                    </div>
+                <div class="progress-grid" id="progressMap"></div>
             </div>
 
             <div class="panel">
                 <h3>Recent Activity</h3>
-                <table id="gymTable">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Problem</th>
-                            <th>Topic</th>
-                            <th>Status</th>
-                            <th>Rules</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="gymTable">
+                        <thead>
+                            <tr>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Problem</th>
+                                        <th>Topic</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <div id="hunt" class="section">
     
-    <div class="panel">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="margin:0;"><span style="color: var(--accent);">B.</span> Weekly Scorecard</h3>
-            <div style="font-size: 0.8rem; color: #8b949e;">LAST 7 DAYS ACTIVITY</div>
-        </div>
-        
-        <div class="progress-grid" style="grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));">
-            <div class="topic-card">
-                <div style="font-size: 2rem; font-weight: bold; color: white;" id="stat_total">0</div>
-                <div class="topic-name">APPS SENT</div>
-            </div>
-            <div class="topic-card">
-                <div style="font-size: 2rem; font-weight: bold; color: gold;" id="stat_dream">0</div>
-                <div class="topic-name">DREAM APPS</div>
-            </div>
-            <div class="topic-card">
-                <div style="font-size: 2rem; font-weight: bold; color: var(--neon);" id="stat_interview">0%</div>
-                <div class="topic-name">INTERVIEW RATE</div>
-            </div>
-            <div class="topic-card">
-                <div style="font-size: 2rem; font-weight: bold; color: var(--danger);" id="stat_reject">0</div>
-                <div class="topic-name">REJECTIONS</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel">
-        <h3 style="margin-top:0; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-            Log New Application
-        </h3>
-        
-        <div style="background: #111; padding: 10px; margin-bottom: 20px; border: 1px dashed #30363d; display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
-            <label style="color: white; font-weight: bold;">TIME DISCIPLINE:</label>
-            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
-                <input type="checkbox" id="app_start2pm" style="width:auto;"> Started 2PM?
-            </label>
-            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
-                <input type="checkbox" id="app_end4pm" style="width:auto;"> Finished 4PM?
-            </label>
-            <input type="number" id="app_duration" placeholder="Mins" style="width: 80px; padding: 5px;">
-        </div>
-
-        <div class="form-grid">
-            <div>
-                <label>Role / Title</label>
-                <input type="text" id="app_role" placeholder="e.g. Python Dev">
-            </div>
-            <div>
-                <label>Company</label>
-                <input type="text" id="app_company" placeholder="e.g. Siemens">
-            </div>
-            <div>
-                <label>Job Link</label>
-                <input type="text" id="app_link" placeholder="e.g. https://linkedin.com/jobs/view/...">
-            </div>
-            <div>
-                <label>Job Type</label>
-                <select id="app_type" style="color: white;">
-                    <option value="Survival">Survival (Bulk)</option>
-                    <option value="Dream" style="color: gold; font-weight: bold;">🌟 DREAM (Tailored)</option>
-                </select>
-            </div>
-            <div>
-                <label>Location</label>
-                <input type="text" id="app_loc" placeholder="e.g. Berlin, Remote">
-            </div>
-            <div>
-                <label>Visa Sponsorship?</label>
-                <select id="app_visa">
-                    <option value="Unknown">Unknown</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                </select>
-            </div>
-            <div>
-                <label>Source</label>
-                <select id="app_source">
-                    <option value="LinkedIn">LinkedIn</option>
-                    <option value="Indeed">Indeed</option>
-                    <option value="CompanySite">Company Site</option>
-                    <option value="Referral">Referral</option>
-                </select>
-            </div>
-            <div>
-                <label>Follow-up Date</label>
-                <input type="date" id="app_followup">
-            </div>
-            <div>
-                <label>Current Status</label>
-                <select id="app_status">
-                    <option value="Applied">Applied</option>
-                    <option value="Interview" style="color: var(--neon);">Interview</option>
-                    <option value="Rejected" style="color: var(--danger);">Rejected</option>
-                </select>
-            </div>
-        </div>
-        <button class="action-btn" onclick="logApp()">LOG APPLICATION</button>
-    </div>
-
-    <div class="panel">
-        <h3>Application History</h3>
-        <table id="appTable">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Role @ Company</th>
-                    <th>Type</th>
-                    <th>Visa</th>
-                    <th>Status</th>
-                    <th>Follow Up</th>
-                </tr>
-            </thead>
-            <tbody>
-                </tbody>
-        </table>
-    </div>
-    </div>
-
-    <div id="meta" class="section">
-    
-    <div class="panel">
-        <h3 style="margin-top:0; border-bottom: 1px solid var(--border); padding-bottom: 10px;">
-            <span style="color: var(--accent);">C.</span> Engagement Protocol
-        </h3>
-        <div class="progress-grid" style="grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center;">
-            <div style="background: #111; padding: 20px; border: 1px solid var(--accent);">
-                <div style="font-size: 3rem; font-weight: bold; color: var(--neon);" id="streak_current">0</div>
-                <div style="color: #888; font-size: 0.8rem;">CURRENT STREAK</div>
-            </div>
-            <div style="background: #111; padding: 20px; border: 1px solid #333;">
-                <div style="font-size: 3rem; font-weight: bold; color: white;" id="streak_best">0</div>
-                <div style="color: #888; font-size: 0.8rem;">LONGEST STREAK</div>
-            </div>
-            <div style="background: #111; padding: 20px; border: 1px solid var(--danger);">
-                <div style="font-size: 3rem; font-weight: bold; color: var(--danger);" id="streak_zero">0</div>
-                <div style="color: #888; font-size: 0.8rem;">ZERO DAYS (MONTH)</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3>Today's Mission Status</h3>
-            <button id="modeToggle" onclick="toggleMode()" style="background: #333; border: 1px solid #555; color: white; padding: 5px 15px; cursor: pointer; border-radius: 20px;">
-                MODE: 🔥 WAR
-            </button>
-        </div>
-
-        <div style="margin-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <span id="label_gym">GYM (Target: 2)</span>
-                <span id="score_gym" style="font-weight: bold;">0 / 2</span>
-            </div>
-            <div class="progress-bar" style="height: 15px; background: #222; margin-bottom: 15px;">
-                <div id="bar_gym" class="progress-fill" style="width: 0%; background: var(--warn);"></div>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <span id="label_hunt">HUNT (Target: 5)</span>
-                <span id="score_hunt" style="font-weight: bold;">0 / 5</span>
-            </div>
-            <div class="progress-bar" style="height: 15px; background: #222;">
-                <div id="bar_hunt" class="progress-fill" style="width: 0%; background: var(--warn);"></div>
-            </div>
-        </div>
-
-        <div id="day_result" style="text-align: center; padding: 15px; background: #111; border: 1px dashed #444; color: #888; font-weight: bold;">
-            MISSION PENDING...
-        </div>
-    </div>
-
-    <div class="panel">
-        <h3>Confidence Log (Weekly)</h3>
-        <p style="font-size: 0.8rem; color: #888;">"What improved? What sucked but I did anyway?"</p>
-        <textarea id="meta_log" style="width: 100%; height: 100px; background: #0d1117; border: 1px solid #30363d; color: white; padding: 10px;" placeholder="Log your thoughts here..."></textarea>
-        <button class="action-btn" onclick="saveMetaLog()" style="margin-top: 10px;">SAVE LOG</button>
-        <div id="saved_logs" style="margin-top: 20px; font-size: 0.85rem; color: #ccc;"></div>
-    </div>
-    </div>
-
-    <div id="calendar" class="section">
-    <div class="panel" style="display: flex; gap: 20px; flex-wrap: wrap;">
-        
-        <div style="flex: 2; min-width: 300px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <button onclick="changeMonth(-1)" class="action-btn" style="width: auto; padding: 5px 15px;">&lt;</button>
-                <h3 id="cal_month_year" style="margin: 0; color: var(--neon);">MONTH YEAR</h3>
-                <button onclick="changeMonth(1)" class="action-btn" style="width: auto; padding: 5px 15px;">&gt;</button>
-            </div>
-            
-            <div id="cal_grid" class="calendar-grid">
+            <div class="panel">
+                <div class="flex-between mb-20">
+                    <h3 class="m-0"><span class="accent-text">B.</span> Weekly Scorecard</h3>
+                    <div class="text-muted small">LAST 7 DAYS ACTIVITY</div>
                 </div>
+                
+                <div class="scorecard-grid">
+                    <div class="topic-card">
+                        <div class="stat-number text-white" id="stat_total">0</div>
+                        <div class="topic-name">APPS SENT</div>
+                    </div>
+                    <div class="topic-card">
+                        <div class="stat-number text-gold" id="stat_dream">0</div>
+                        <div class="topic-name">DREAM APPS</div>
+                    </div>
+                    <div class="topic-card">
+                        <div class="stat-number text-neon" id="stat_interview">0%</div>
+                        <div class="topic-name">INTERVIEW RATE</div>
+                    </div>
+                    <div class="topic-card">
+                        <div class="stat-number text-danger" id="stat_reject">0</div>
+                        <div class="topic-name">REJECTIONS</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel" id="huntFormPanel">
+                <h3 class="panel-header">
+                    Log / Edit Application
+                </h3>
+                
+                <div class="form-grid">
+                    <input type="hidden" id="app_edit_id"> <div>
+                        <label>Role / Title</label>
+                        <input type="text" id="app_role" placeholder="e.g. Python Dev">
+                    </div>
+                    <div>
+                        <label>Company</label>
+                        <input type="text" id="app_company" placeholder="e.g. Siemens">
+                    </div>
+                    <div>
+                        <label>Job Link</label>
+                        <input type="text" id="app_link" placeholder="e.g. https://linkedin.com/jobs/view/...">
+                    </div>
+                    <div>
+                        <label>Job Type</label>
+                        <select id="app_type" class="text-white">
+                            <option value="Survival">Survival (Bulk)</option>
+                            <option value="Dream" class="text-gold bold">🌟 DREAM (Tailored)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Location</label>
+                        <input type="text" id="app_loc" placeholder="e.g. Berlin, Remote">
+                    </div>
+                    <div>
+                        <label>Visa Sponsorship?</label>
+                        <select id="app_visa">
+                            <option value="Unknown">Unknown</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Source</label>
+                        <select id="app_source">
+                            <option value="LinkedIn">LinkedIn</option>
+                            <option value="Indeed">Indeed</option>
+                            <option value="CompanySite">Company Site</option>
+                            <option value="Referral">Referral</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Follow-up Date</label>
+                        <input type="date" id="app_followup">
+                    </div>
+                    <div>
+                        <label>Current Status</label>
+                        <select id="app_status">
+                            <option value="Applied">Applied</option>
+                            <option value="Interview" class="text-neon">Interview</option>
+                            <option value="Rejected" class="text-danger">Rejected</option>
+                            <option value="Offer" class="text-gold">Offer</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="action-btn" id="btn_log_app" onclick="logApp()">LOG APPLICATION</button>
+                    <button class="action-btn btn-secondary" id="btn_cancel_edit" onclick="cancelEdit()" style="display:none;">CANCEL EDIT</button>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="flex-between align-center mb-10">
+                    <h3>Application History</h3>
+                    <input type="text" id="app_search" placeholder="🔍 Search Company..." onkeyup="searchApps()" class="search-input">
+                </div>
+                <div class="table-responsive">
+                    <table id="appTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Role @ Company</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Follow Up</th>
+                                <th>Action</th> </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <div style="flex: 1; min-width: 250px; background: #0d1117; border: 1px solid var(--border); padding: 15px; border-radius: 4px;">
-            <h4 id="selected_date_display" style="margin-top: 0; color: var(--accent); border-bottom: 1px solid #333; padding-bottom: 10px;">Select a Date</h4>
+        <div id="meta" class="section">
+    
+            <div class="panel">
+                <h3 class="panel-header">
+                    <span class="accent-text">C.</span> Engagement Protocol
+                </h3>
+                <div class="streak-grid">
+                    <div class="streak-box accent-border">
+                        <div class="streak-num text-neon" id="streak_current">0</div>
+                        <div class="streak-label">CURRENT STREAK</div>
+                    </div>
+                    <div class="streak-box muted-border">
+                        <div class="streak-num text-white" id="streak_best">0</div>
+                        <div class="streak-label">LONGEST STREAK</div>
+                    </div>
+                    <div class="streak-box danger-border">
+                        <div class="streak-num text-danger" id="streak_zero">0</div>
+                        <div class="streak-label">ZERO DAYS (MONTH)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="flex-between align-center mb-20">
+                    <h3>Today's Mission Status</h3>
+                    <button id="modeToggle" onclick="toggleMode()" class="mode-btn">
+                        MODE: 🔥 WAR
+                    </button>
+                </div>
+
+                <div class="mb-20">
+                    <div class="flex-between mb-5">
+                        <span id="label_gym">GYM (Target: 2)</span>
+                        <span id="score_gym" class="bold">0 / 2</span>
+                    </div>
+                    <div class="progress-bar-bg mb-15">
+                        <div id="bar_gym" class="progress-fill warn-bg"></div>
+                    </div>
+
+                    <div class="flex-between mb-5">
+                        <span id="label_hunt">HUNT (Target: 5)</span>
+                        <span id="score_hunt" class="bold">0 / 5</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="bar_hunt" class="progress-fill warn-bg"></div>
+                    </div>
+                </div>
+
+                <div id="day_result" class="mission-status pending">
+                    MISSION PENDING...
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>Confidence Log (Weekly)</h3>
+                <p class="small-text text-muted">"What improved? What sucked but I did anyway?"</p>
+                <textarea id="meta_log" class="log-textarea" placeholder="Log your thoughts here..."></textarea>
+                <button class="action-btn mt-10" onclick="saveMetaLog()">SAVE LOG</button>
+                <div id="saved_logs" class="saved-logs-container"></div>
+            </div>
+        </div>
+
+        <div id="calendar" class="section">
+            <div class="panel flex-wrap-gap">
+                
+                <div class="calendar-wrapper">
+                    <div class="flex-between align-center mb-15">
+                        <button onclick="changeMonth(-1)" class="action-btn small-btn">&lt;</button>
+                        <h3 id="cal_month_year" class="m-0 text-neon">MONTH YEAR</h3>
+                        <button onclick="changeMonth(1)" class="action-btn small-btn">&gt;</button>
+                    </div>
+                    
+                    <div id="cal_grid" class="calendar-grid"></div>
+                </div>
+
+                <div class="task-wrapper">
+                    <h4 id="selected_date_display" class="task-header">Select a Date</h4>
+                    
+                    <div class="flex-gap-5 mb-15">
+                        <input type="text" id="new_task_input" placeholder="Add task..." onkeypress="handleTaskEnter(event)">
+                        <button onclick="addTask()" class="action-btn auto-width">+</button>
+                    </div>
+
+                    <div id="task_list" class="task-list-container">
+                        <div class="no-tasks">No tasks for this day.</div>
+                    </div>
+                </div>
+            </div>
             
-            <div style="display: flex; gap: 5px; margin-bottom: 15px;">
-                <input type="text" id="new_task_input" placeholder="Add task..." onkeypress="handleTaskEnter(event)">
-                <button onclick="addTask()" class="action-btn" style="width: auto;">+</button>
-            </div>
-
-            <div id="task_list" style="display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto;">
-                <div style="color: #666; font-style: italic;">No tasks for this day.</div>
+            <div class="panel mt-20">
+                <h3>📚 The Library</h3>
+                <div class="flex-gap-10 mb-10">
+                    <input type="text" id="lib_title" placeholder="Title (e.g. NeetCode Roadmap)" class="flex-1">
+                    <input type="text" id="lib_url" placeholder="URL" class="flex-2">
+                    <select id="lib_tag" class="w-100"><option>Tool</option><option>Read</option><option>Video</option></select>
+                    <button class="action-btn auto-width" onclick="addLibraryItem()">SAVE</button>
+                </div>
+                <div id="library_list" class="library-grid"></div>
             </div>
         </div>
-    </div>
-    <div class="panel" style="margin-top: 20px;">
-        <h3>📚 The Library</h3>
-        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-            <input type="text" id="lib_title" placeholder="Title (e.g. NeetCode Roadmap)" style="flex:1">
-            <input type="text" id="lib_url" placeholder="URL" style="flex:2">
-            <select id="lib_tag" style="width:100px"><option>Tool</option><option>Read</option><option>Video</option></select>
-            <button class="action-btn" onclick="addLibraryItem()" style="width:auto">SAVE</button>
-        </div>
-        <div id="library_list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;"></div>
-    </div>
-    </div>
 
-</div>
+    </div>
 
     <script src="./scripts/war.js"></script>
 </body>
