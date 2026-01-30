@@ -28,6 +28,14 @@ function getLocalArray(key) {
     }
 }
 
+function formatDate(dateString) {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    // If it's an invalid date, just return the original string
+    if (isNaN(date.getTime())) return dateString;
+    return date.toLocaleDateString(); // Returns format like "1/22/2026" or "22.01.2026" depending on your browser
+}
+
 // --- 0. THEME LOGIC ---
 function loadTheme() {
     const theme = localStorage.getItem(THEME_KEY) || 'theme-dark';
@@ -149,7 +157,7 @@ function loadGymData() {
     data.slice(0, 10).forEach(log => {
         let icon = log.status === 'Green' ? '✅' : (log.status === 'Yellow' ? '🟡' : '🔴');
         tbody.innerHTML += `<tr>
-            <td>${log.date}</td>
+            <td>${formatDate(log.date)}</td>
             <td><b>${log.name}</b><br><span class="text-muted small">${log.difficulty}</span></td>
             <td><span class="tag">${log.topic}</span></td>
             <td>${icon} ${log.time ? log.time + 'm' : ''}</td>
@@ -298,7 +306,7 @@ function loadAppData() {
             else statusClass = 'text-muted';
 
             tbody.innerHTML += `<tr>
-                <td>${log.date}</td>
+                <td>${formatDate(log.date)}</td>
                 <td><b>${log.role}</b><br><small class="text-muted">${log.company}</small></td>
                 <td>${log.type==='Dream'?'<span class="text-gold">🌟 DREAM</span>':'Survival'}</td>
                 <td class="${statusClass} bold">${log.status}</td>
