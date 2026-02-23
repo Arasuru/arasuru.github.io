@@ -8,9 +8,7 @@ const CALENDAR_KEY = 'war_calendar_tasks';
 const THEME_KEY = 'war_theme';
 
 // Default URL from your file (can be overridden in UI)
-const DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbxuJvYIH_eqbygdEDze0MmffTUsNrLM2uzZweHV3AXtxwlkrQi5OOqWpsgWIVjpZzA22g/exec";
 
-let API_URL = localStorage.getItem(API_KEY_STORAGE) || DEFAULT_API_URL;
 let currentMode = 'WAR';
 
 // Helper for Edit Mode
