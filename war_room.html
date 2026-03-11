@@ -1,368 +1,1970 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WAR ROOM</title>
-    <link rel="stylesheet" href="./css/war.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="./resources/favicon_io/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./resources/favicon_io/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./resources/favicon_io/favicon-16x16.png">
-    <link rel="manifest" href="./resources/favicon_io/site.webmanifest">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAR ROOM — PRODUCTION LINE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;700&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+
+/* =============================================
+   VARIABLES
+   ============================================= */
+:root {
+  --bg:        #080c10;
+  --surface:   #0d1219;
+  --surface2:  #111820;
+  --border:    #1e2d3d;
+  --border2:   #253447;
+  --text:      #c8d6e5;
+  --muted:     #4a6277;
+  --green:     #00e676;
+  --green-dim: rgba(0,230,118,0.08);
+  --red:       #ff3d3d;
+  --red-dim:   rgba(255,61,61,0.08);
+  --amber:     #ffb300;
+  --amber-dim: rgba(255,179,0,0.08);
+  --blue:      #2196f3;
+  --blue-dim:  rgba(33,150,243,0.08);
+  --white:     #e8f0f8;
+
+  --font-ui:   'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-head: 'Barlow Condensed', sans-serif;
+}
+
+/* =============================================
+   RESET
+   ============================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body {
+  font-family: var(--font-ui);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+input, select, textarea, button { font-family: var(--font-ui); }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+/* =============================================
+   SCROLLBAR
+   ============================================= */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* =============================================
+   SCAN LINE OVERLAY
+   ============================================= */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 9997;
+}
+
+/* =============================================
+   GATE (Login Screen)
+   ============================================= */
+#gate {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gate-wrap {
+  width: 420px;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  position: relative;
+  padding: 3rem;
+}
+
+.gate-wrap::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+}
+
+.gate-corner {
+  position: absolute;
+  width: 12px; height: 12px;
+  border-color: var(--green);
+  border-style: solid;
+}
+.gate-corner.tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+.gate-corner.tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
+.gate-corner.bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
+.gate-corner.br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+.gate-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.gate-title {
+  font-family: var(--font-head);
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--white);
+  letter-spacing: 0.1em;
+  line-height: 1;
+  margin-bottom: 2rem;
+}
+
+.gate-title span { color: var(--green); }
+
+.gate-field { margin-bottom: 1rem; }
+.gate-field label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.gate-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  color: var(--green);
+  padding: 0.75rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.gate-input::placeholder { color: var(--muted); }
+.gate-input:focus { border-color: var(--green); }
+.gate-input.error { border-color: var(--red); animation: shake 0.3s; }
+
+.gate-input-url {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.6rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.gate-input-url::placeholder { color: var(--muted); font-size: 0.65rem; }
+.gate-input-url:focus { border-color: var(--blue); }
+
+.gate-btn {
+  width: 100%;
+  background: var(--green);
+  color: var(--bg);
+  border: none;
+  padding: 0.85rem;
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 1.5rem;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.gate-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.gate-btn:active { transform: translateY(0); }
+
+.gate-hint {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 1rem;
+  letter-spacing: 0.1em;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* =============================================
+   LAYOUT
+   ============================================= */
+#dashboard { display: none; min-height: 100vh; }
+
+/* =============================================
+   TOPBAR
+   ============================================= */
+.topbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  padding: 0 1.5rem;
+  height: 56px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+
+.topbar-brand {
+  display: flex; align-items: center; gap: 0.75rem;
+}
+
+.brand-icon {
+  width: 32px; height: 32px;
+  background: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%);
+}
+.brand-icon svg { width: 16px; height: 16px; fill: var(--bg); }
+
+.brand-text {
+  font-family: var(--font-head);
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  color: var(--white);
+}
+.brand-text span { color: var(--green); }
+
+.brand-sub {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+}
+
+/* Tabs in center */
+.topbar-tabs {
+  display: flex; gap: 0; height: 100%;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  border-right: 1px solid var(--border);
+  color: var(--muted);
+  padding: 0 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+  height: 100%;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.tab-btn:first-child { border-left: 1px solid var(--border); }
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active {
+  color: var(--green);
+  background: var(--green-dim);
+}
+.tab-btn.active::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--green);
+}
+
+.tab-num {
+  font-size: 0.5rem;
+  background: var(--border);
+  color: var(--muted);
+  padding: 0.1rem 0.3rem;
+  border-radius: 2px;
+}
+.tab-btn.active .tab-num { background: var(--green); color: var(--bg); }
+
+/* Right controls */
+.topbar-right {
+  display: flex; align-items: center; gap: 1.5rem;
+}
+
+.clock-group {
+  display: flex; gap: 1.5rem;
+}
+
+.clock-item {
+  text-align: right;
+}
+.clock-zone {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.clock-time {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--green);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.clock-status {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+.sync-status {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-align: right;
+}
+
+.theme-switcher {
+  display: flex; gap: 0.3rem;
+}
+.theme-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  width: 28px; height: 28px;
+  font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s;
+  border-radius: 4px;
+}
+.theme-btn:hover { border-color: var(--border2); }
+
+/* =============================================
+   MAIN CONTENT
+   ============================================= */
+.main {
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* =============================================
+   SECTIONS
+   ============================================= */
+.section { display: none; animation: fadeUp 0.2s ease; }
+.section.active { display: block; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================================
+   GRID LAYOUTS
+   ============================================= */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.col-span-2 { grid-column: span 2; }
+
+/* =============================================
+   PANEL
+   ============================================= */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.panel-title {
+  font-family: var(--font-head);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex; align-items: center; gap: 0.75rem;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-title::before {
+  content: '';
+  display: block;
+  width: 3px; height: 14px;
+  background: var(--green);
+  flex-shrink: 0;
+}
+
+.panel-title.amber::before { background: var(--amber); }
+.panel-title.red::before { background: var(--red); }
+.panel-title.blue::before { background: var(--blue); }
+
+/* =============================================
+   FORMS
+   ============================================= */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.field label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="password"],
+select,
+textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.55rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  outline: none;
+  transition: border-color 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input:focus, select:focus, textarea:focus { border-color: var(--blue); }
+input::placeholder, textarea::placeholder { color: var(--muted); }
+
+select option { background: var(--surface2); }
+
+/* =============================================
+   BUTTONS
+   ============================================= */
+.btn {
+  background: var(--green);
+  color: var(--bg);
+  border: none;
+  padding: 0.6rem 1.25rem;
+  font-family: var(--font-head);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  white-space: nowrap;
+}
+.btn:hover { opacity: 0.9; }
+.btn:active { transform: scale(0.98); }
+
+.btn-sm { padding: 0.35rem 0.75rem; font-size: 0.65rem; }
+.btn-amber { background: var(--amber); }
+.btn-red { background: var(--red); }
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+}
+.btn-ghost:hover { border-color: var(--text); color: var(--text); }
+.btn-update { background: var(--amber); color: var(--bg); }
+
+/* =============================================
+   STAT CARDS (scorecard)
+   ============================================= */
+.stat-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+}
+
+.stat-card.green::after  { background: var(--green); }
+.stat-card.amber::after  { background: var(--amber); }
+.stat-card.red::after    { background: var(--red); }
+.stat-card.blue::after   { background: var(--blue); }
+
+.stat-value {
+  font-family: var(--font-head);
+  font-size: 2.8rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+.stat-value.green { color: var(--green); }
+.stat-value.amber { color: var(--amber); }
+.stat-value.red   { color: var(--red); }
+.stat-value.blue  { color: var(--blue); }
+.stat-value.white { color: var(--white); }
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* =============================================
+   TABLE
+   ============================================= */
+.table-wrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  min-width: 500px;
+}
+
+thead tr {
+  border-bottom: 1px solid var(--border2);
+}
+
+th {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-weight: 400;
+}
+
+td {
+  padding: 0.75rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+
+tbody tr { transition: background 0.15s; }
+tbody tr:hover { background: var(--surface2); }
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.5rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.status-pill {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 2px;
+}
+.status-pill.green { background: var(--green-dim); color: var(--green); border: 1px solid var(--green); }
+.status-pill.amber { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber); }
+.status-pill.red   { background: var(--red-dim);   color: var(--red);   border: 1px solid var(--red); }
+.status-pill.blue  { background: var(--blue-dim);  color: var(--blue);  border: 1px solid var(--blue); }
+.status-pill.muted { background: var(--surface2); color: var(--muted);  border: 1px solid var(--border); }
+
+/* =============================================
+   PROGRESS BAR
+   ============================================= */
+.progress-track {
+  height: 4px;
+  background: var(--border);
+  overflow: hidden;
+  border-radius: 1px;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--green);
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+.progress-fill.amber { background: var(--amber); }
+.progress-fill.red   { background: var(--red); }
+
+/* =============================================
+   GYM — PROGRESS MAP
+   ============================================= */
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 0.6rem;
+}
+
+.topic-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 0.75rem;
+  transition: border-color 0.2s;
+}
+.topic-card:hover { border-color: var(--border2); }
+
+.topic-name {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+}
+
+/* =============================================
+   META — STREAK
+   ============================================= */
+.streak-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.streak-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.streak-num {
+  font-family: var(--font-head);
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.streak-label {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+
+/* =============================================
+   META — MISSION
+   ============================================= */
+.mission-row {
+  margin-bottom: 1rem;
+}
+
+.mission-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.mission-name {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--text);
+  text-transform: uppercase;
+}
+
+.mission-score {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.mission-banner {
+  padding: 1rem;
+  text-align: center;
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 1rem;
+  border: 1px solid var(--border);
+}
+.mission-banner.pending { color: var(--muted); background: var(--surface2); }
+.mission-banner.success { color: var(--green); background: var(--green-dim); border-color: var(--green); }
+
+.mode-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.mode-badge:hover { border-color: var(--amber); color: var(--amber); }
+
+/* =============================================
+   LOG TEXTAREA
+   ============================================= */
+textarea {
+  height: 90px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.log-feed { margin-top: 1rem; }
+.log-entry {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+.log-entry:last-child { border-bottom: none; }
+.log-date {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  margin-bottom: 0.2rem;
+}
+
+/* =============================================
+   CALENDAR
+   ============================================= */
+.calendar-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 1rem;
+  align-items: start;
+}
+
+.cal-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1rem;
+}
+
+.cal-month {
+  font-family: var(--font-head);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--green);
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+
+.cal-header {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-align: center;
+  padding: 0.4rem 0;
+  text-transform: uppercase;
+}
+
+.cal-day {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0.3rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+}
+.cal-day:hover { border-color: var(--border2); background: var(--surface); }
+.cal-day.today { border-color: var(--green); }
+.cal-day.selected { background: var(--green-dim); border-color: var(--green); }
+
+.day-num {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.cal-day.today .day-num { color: var(--green); }
+
+.cal-dot {
+  width: 4px; height: 4px;
+  background: var(--amber);
+  border-radius: 50%;
+  position: absolute; bottom: 4px; right: 4px;
+}
+
+/* Task Panel */
+.task-panel {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 1rem;
+}
+
+.task-date-header {
+  font-family: var(--font-head);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--green);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.task-add-row {
+  display: flex; gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.task-list { display: flex; flex-direction: column; gap: 0.4rem; max-height: 320px; overflow-y: auto; }
+
+.task-item {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.6rem;
+  gap: 0.4rem;
+}
+
+.task-check-area {
+  display: flex; align-items: center; gap: 0.5rem;
+  flex: 1; cursor: pointer;
+  font-size: 0.78rem;
+}
+
+.task-check {
+  width: 14px; height: 14px;
+  border: 1px solid var(--border2);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem;
+  color: var(--green);
+  transition: background 0.15s;
+}
+.task-item.done .task-check { background: var(--green); border-color: var(--green); color: var(--bg); }
+.task-item.done .task-text { text-decoration: line-through; color: var(--muted); }
+
+.task-del {
+  background: none; border: none;
+  color: var(--muted); cursor: pointer; font-size: 1rem; line-height: 1;
+  transition: color 0.15s;
+}
+.task-del:hover { color: var(--red); }
+
+.no-tasks {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  padding: 1rem 0;
+  text-align: center;
+  letter-spacing: 0.1em;
+}
+
+/* =============================================
+   LIBRARY
+   ============================================= */
+.lib-form-row {
+  display: flex; gap: 0.5rem; align-items: flex-end;
+  margin-bottom: 1rem; flex-wrap: wrap;
+}
+.lib-form-row .field { flex: 1; min-width: 140px; }
+.lib-form-row .field.narrow { flex: 0 0 100px; }
+
+.lib-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.6rem;
+}
+
+.lib-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 0.9rem;
+  transition: border-color 0.2s;
+}
+.lib-card:hover { border-color: var(--border2); }
+
+.lib-tag-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+
+.lib-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--blue);
+  margin-bottom: 0.3rem;
+  line-height: 1.3;
+}
+.lib-title:hover { color: var(--green); }
+
+.lib-url-text {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* =============================================
+   SEARCH
+   ============================================= */
+.search-row {
+  display: flex; gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+.search-wrap {
+  position: relative; flex: 1; max-width: 240px;
+}
+.search-wrap input { padding-left: 2rem; }
+.search-icon {
+  position: absolute; left: 0.6rem; top: 50%; transform: translateY(-50%);
+  font-size: 0.8rem; color: var(--muted); pointer-events: none;
+}
+
+/* =============================================
+   UTILS
+   ============================================= */
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-sm { gap: 0.5rem; }
+.gap-md { gap: 1rem; }
+.mb-sm { margin-bottom: 0.5rem; }
+.mb-md { margin-bottom: 1rem; }
+.mb-lg { margin-bottom: 1.5rem; }
+.mt-sm { margin-top: 0.5rem; }
+.mt-md { margin-top: 1rem; }
+.text-green { color: var(--green); }
+.text-amber { color: var(--amber); }
+.text-red   { color: var(--red); }
+.text-blue  { color: var(--blue); }
+.text-muted { color: var(--muted); }
+.text-white { color: var(--white); }
+.mono { font-family: var(--font-mono); }
+.small { font-size: 0.7rem; }
+.bold { font-weight: 700; }
+
+/* =============================================
+   THEME OVERRIDES
+   ============================================= */
+
+/* Light Theme */
+.theme-light {
+  --bg:        #f0f4f8;
+  --surface:   #ffffff;
+  --surface2:  #f7f9fc;
+  --border:    #dde3ea;
+  --border2:   #c5d0db;
+  --text:      #2d3748;
+  --muted:     #718096;
+  --green:     #059669;
+  --green-dim: rgba(5,150,105,0.07);
+  --red:       #dc2626;
+  --red-dim:   rgba(220,38,38,0.07);
+  --amber:     #d97706;
+  --amber-dim: rgba(217,119,6,0.07);
+  --blue:      #2563eb;
+  --blue-dim:  rgba(37,99,235,0.07);
+  --white:     #1a202c;
+}
+.theme-light body::before { display: none; }
+
+/* Creative Theme */
+.theme-creative {
+  --bg:        #12002b;
+  --surface:   #1c0040;
+  --surface2:  #220050;
+  --border:    #3d1070;
+  --border2:   #5a1a9e;
+  --text:      #e8d5ff;
+  --muted:     #8860b0;
+  --green:     #00e5ff;
+  --green-dim: rgba(0,229,255,0.08);
+  --red:       #ff4081;
+  --red-dim:   rgba(255,64,129,0.08);
+  --amber:     #ffea00;
+  --amber-dim: rgba(255,234,0,0.08);
+  --blue:      #ce93d8;
+  --blue-dim:  rgba(206,147,216,0.08);
+  --white:     #f3e5ff;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 900px) {
+  .topbar { grid-template-columns: 1fr auto; }
+  .topbar-tabs { display: none; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .calendar-layout { grid-template-columns: 1fr; }
+  .clock-group { gap: 0.75rem; }
+}
+</style>
 </head>
-<body class="theme-dark"> <div id="gate">
-        <h1 class="gate-title">WAR ROOM ACCESS</h1>
-        
-        <input type="password" id="password" placeholder="ENTER PASSWORD" onkeyup="checkPass(event)" class="gate-input mb-15">
-        
-        <input type="text" id="apiUrl" placeholder="OPTIONAL: GOOGLE SCRIPT URL" class="gate-input-url mb-10">
-        
-        <button onclick="triggerLogin()" class="gate-btn mt-10">ENTER</button>
+<body class="theme-dark">
 
-        <p class="gate-hint">(Hint: warroom)</p>
+<!-- =============================================
+     GATE
+     ============================================= -->
+<div id="gate">
+  <div class="gate-wrap">
+    <div class="gate-corner tl"></div>
+    <div class="gate-corner tr"></div>
+    <div class="gate-corner bl"></div>
+    <div class="gate-corner br"></div>
+
+    <div class="gate-label">Classified Access</div>
+    <div class="gate-title">WAR<span>ROOM</span></div>
+
+    <div class="gate-field">
+      <label>Authorization Code</label>
+      <input type="password" id="password" placeholder="••••••••" onkeyup="checkPass(event)" class="gate-input">
     </div>
 
-    <div class="container" id="dashboard">
-        <header>
-            <div>
-                <h1>WAR ROOM</h1>
-                <p class="subtitle">PROTOCOL: PRODUCTION LINE</p>
-            </div>
-            
-            <div class="header-controls">
-                <div class="theme-switcher">
-                    <button onclick="setTheme('theme-dark')" class="theme-btn" title="Dark Mode">🌑</button>
-                    <button onclick="setTheme('theme-light')" class="theme-btn" title="Light Mode">☀️</button>
-                    <button onclick="setTheme('theme-creative')" class="theme-btn" title="Creative Mode">🎨</button>
-                </div>
-
-                <div class="clock-group">
-                    <div class="clock-box">
-                        <div class="label">GERMANY (CET)</div>
-                        <div class="time" id="germanClock">00:00:00</div>
-                        <div class="label" id="timeStatus1">OFF DUTY</div>
-                    </div>
-                    <div class="clock-box">
-                        <div class="label">UAE (GST)</div>
-                        <div class="time" id="uaeClock">00:00:00</div>
-                        <div class="label" id="timeStatus3">OFF DUTY</div>
-                    </div>
-                    <div class="clock-box">
-                        <div class="label">Cloud SYNC</div>
-                        <div class="label" id="timeStatus">Unknown</div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('gym')">BLOCK 1: GYM</button>
-            <button class="tab-btn" onclick="switchTab('hunt')">BLOCK 2: HUNT</button>
-            <button class="tab-btn" onclick="switchTab('meta')">MVP & META</button>
-            <button class="tab-btn" onclick="switchTab('calendar')">CALENDAR</button>
-        </div>
-
-        <div id="gym" class="section active">
-            
-            <div class="panel">
-                <h3 class="panel-header">
-                    <span class="accent-text">A.</span> Daily Problem Tracker
-                </h3>
-                
-                <div class="form-grid">
-                    <div>
-                        <label>Problem Name</label>
-                        <input type="text" id="lc_name" placeholder="e.g. Valid Anagram">
-                    </div>
-                    <div>
-                        <label>Topic</label>
-                        <select id="lc_topic">
-                            <option value="Arrays">Arrays & Hashing</option>
-                            <option value="TwoPointers">Two Pointers</option>
-                            <option value="SlidingWindow">Sliding Window</option>
-                            <option value="Stack">Stack</option>
-                            <option value="BinarySearch">Binary Search</option>
-                            <option value="LinkedList">Linked List</option>
-                            <option value="Trees">Trees</option>
-                            <option value="Heap">Heap / PQ</option>
-                            <option value="Backtracking">Backtracking</option>
-                            <option value="Graphs">Graphs</option>
-                            <option value="DP">Dynamic Programming</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Difficulty</label>
-                        <select id="lc_diff">
-                            <option value="Easy">Easy</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Hard">Hard</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Status (Honesty Protocol)</label>
-                        <select id="lc_status" class="status-select">
-                            <option value="Green">✅ Solved (Own)</option>
-                            <option value="Yellow">🟡 Solved (Hint)</option>
-                            <option value="Red">🔴 Watched Solution</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Time Spent (Mins)</label>
-                        <input type="number" id="lc_time" placeholder="20">
-                    </div>
-                </div>
-                <button class="action-btn" onclick="logGym()">LOG PROBLEM</button>
-            </div>
-
-            <div class="panel">
-                <h3 class="panel-header">
-                    <span class="accent-text">B.</span> NeetCode 150 Progress
-                </h3>
-                <div class="progress-grid" id="progressMap"></div>
-            </div>
-
-            <div class="panel">
-                <h3>Recent Activity</h3>
-                <div class="table-responsive">
-                    <table id="gymTable">
-                        <thead>
-                            <tr>
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Problem</th>
-                                        <th>Topic</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="hunt" class="section">
-    
-            <div class="panel">
-                <div class="flex-between mb-20">
-                    <h3 class="m-0"><span class="accent-text">B.</span> Weekly Scorecard</h3>
-                    <div class="text-muted small">LAST 7 DAYS ACTIVITY</div>
-                </div>
-                
-                <div class="scorecard-grid">
-                    <div class="topic-card">
-                        <div class="stat-number text-white" id="stat_total">0</div>
-                        <div class="topic-name">APPS SENT</div>
-                    </div>
-                    <div class="topic-card">
-                        <div class="stat-number text-gold" id="stat_dream">0</div>
-                        <div class="topic-name">DREAM APPS</div>
-                    </div>
-                    <div class="topic-card">
-                        <div class="stat-number text-neon" id="stat_interview">0%</div>
-                        <div class="topic-name">INTERVIEW RATE</div>
-                    </div>
-                    <div class="topic-card">
-                        <div class="stat-number text-danger" id="stat_reject">0</div>
-                        <div class="topic-name">REJECTIONS</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel" id="huntFormPanel">
-                <h3 class="panel-header">
-                    Log / Edit Application
-                </h3>
-                
-                <div class="form-grid">
-                    <input type="hidden" id="app_edit_id"> <div>
-                        <label>Role / Title</label>
-                        <input type="text" id="app_role" placeholder="e.g. Python Dev">
-                    </div>
-                    <div>
-                        <label>Company</label>
-                        <input type="text" id="app_company" placeholder="e.g. Siemens">
-                    </div>
-                    <div>
-                        <label>Job Link</label>
-                        <input type="text" id="app_link" placeholder="e.g. https://linkedin.com/jobs/view/...">
-                    </div>
-                    <div>
-                        <label>Job Type</label>
-                        <select id="app_type" class="text-white">
-                            <option value="Survival">Survival (Bulk)</option>
-                            <option value="Dream" class="text-gold bold">🌟 DREAM (Tailored)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Location</label>
-                        <input type="text" id="app_loc" placeholder="e.g. Berlin, Remote">
-                    </div>
-                    <div>
-                        <label>Visa Sponsorship?</label>
-                        <select id="app_visa">
-                            <option value="Unknown">Unknown</option>
-                            <option value="Yes">Yes</option>
-                            <option value="No">No</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Source</label>
-                        <select id="app_source">
-                            <option value="LinkedIn">LinkedIn</option>
-                            <option value="Indeed">Indeed</option>
-                            <option value="CompanySite">Company Site</option>
-                            <option value="Referral">Referral</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Follow-up Date</label>
-                        <input type="date" id="app_followup">
-                    </div>
-                    <div>
-                        <label>Current Status</label>
-                        <select id="app_status">
-                            <option value="Applied">Applied</option>
-                            <option value="Interview" class="text-neon">Interview</option>
-                            <option value="Rejected" class="text-danger">Rejected</option>
-                            <option value="Offer" class="text-gold">Offer</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button class="action-btn" id="btn_log_app" onclick="logApp()">LOG APPLICATION</button>
-                    <button class="action-btn btn-secondary" id="btn_cancel_edit" onclick="cancelEdit()" style="display:none;">CANCEL EDIT</button>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="flex-between align-center mb-10">
-                    <h3>Application History</h3>
-                    <input type="text" id="app_search" placeholder="🔍 Search Company..." onkeyup="searchApps()" class="search-input">
-                </div>
-                <div class="table-responsive">
-                    <table id="appTable">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Role @ Company</th>
-                                <th>Type</th>
-                                <th>Status</th>
-                                <th>Follow Up</th>
-                                <th>Action</th> </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="meta" class="section">
-    
-            <div class="panel">
-                <h3 class="panel-header">
-                    <span class="accent-text">C.</span> Engagement Protocol
-                </h3>
-                <div class="streak-grid">
-                    <div class="streak-box accent-border">
-                        <div class="streak-num text-neon" id="streak_current">0</div>
-                        <div class="streak-label">CURRENT STREAK</div>
-                    </div>
-                    <div class="streak-box muted-border">
-                        <div class="streak-num text-white" id="streak_best">0</div>
-                        <div class="streak-label">LONGEST STREAK</div>
-                    </div>
-                    <div class="streak-box danger-border">
-                        <div class="streak-num text-danger" id="streak_zero">0</div>
-                        <div class="streak-label">ZERO DAYS (MONTH)</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="flex-between align-center mb-20">
-                    <h3>Today's Mission Status</h3>
-                    <button id="modeToggle" onclick="toggleMode()" class="mode-btn">
-                        MODE: 🔥 WAR
-                    </button>
-                </div>
-
-                <div class="mb-20">
-                    <div class="flex-between mb-5">
-                        <span id="label_gym">GYM (Target: 2)</span>
-                        <span id="score_gym" class="bold">0 / 2</span>
-                    </div>
-                    <div class="progress-bar-bg mb-15">
-                        <div id="bar_gym" class="progress-fill warn-bg"></div>
-                    </div>
-
-                    <div class="flex-between mb-5">
-                        <span id="label_hunt">HUNT (Target: 5)</span>
-                        <span id="score_hunt" class="bold">0 / 5</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div id="bar_hunt" class="progress-fill warn-bg"></div>
-                    </div>
-                </div>
-
-                <div id="day_result" class="mission-status pending">
-                    MISSION PENDING...
-                </div>
-            </div>
-
-            <div class="panel">
-                <h3>Confidence Log (Weekly)</h3>
-                <p class="small-text text-muted">"What improved? What sucked but I did anyway?"</p>
-                <textarea id="meta_log" class="log-textarea" placeholder="Log your thoughts here..."></textarea>
-                <button class="action-btn mt-10" onclick="saveMetaLog()">SAVE LOG</button>
-                <div id="saved_logs" class="saved-logs-container"></div>
-            </div>
-        </div>
-
-        <div id="calendar" class="section">
-            <div class="panel flex-wrap-gap">
-                
-                <div class="calendar-wrapper">
-                    <div class="flex-between align-center mb-15">
-                        <button onclick="changeMonth(-1)" class="action-btn small-btn">&lt;</button>
-                        <h3 id="cal_month_year" class="m-0 text-neon">MONTH YEAR</h3>
-                        <button onclick="changeMonth(1)" class="action-btn small-btn">&gt;</button>
-                    </div>
-                    
-                    <div id="cal_grid" class="calendar-grid"></div>
-                </div>
-
-                <div class="task-wrapper">
-                    <h4 id="selected_date_display" class="task-header">Select a Date</h4>
-                    
-                    <div class="flex-gap-5 mb-15">
-                        <input type="text" id="new_task_input" placeholder="Add task..." onkeypress="handleTaskEnter(event)">
-                        <button onclick="addTask()" class="action-btn auto-width">+</button>
-                    </div>
-
-                    <div id="task_list" class="task-list-container">
-                        <div class="no-tasks">No tasks for this day.</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="panel mt-20">
-                <h3>📚 The Library</h3>
-                <div class="flex-gap-10 mb-10">
-                    <input type="text" id="lib_title" placeholder="Title (e.g. NeetCode Roadmap)" class="flex-1">
-                    <input type="text" id="lib_url" placeholder="URL" class="flex-2">
-                    <select id="lib_tag" class="w-100"><option>Tool</option><option>Read</option><option>Video</option></select>
-                    <button class="action-btn auto-width" onclick="addLibraryItem()">SAVE</button>
-                </div>
-                <div id="library_list" class="library-grid"></div>
-            </div>
-        </div>
-
+    <div class="gate-field">
+      <label>Cloud Sync URL (optional)</label>
+      <input type="text" id="apiUrl" placeholder="https://script.google.com/..." class="gate-input-url">
     </div>
 
-    <script src="./scripts/war.js"></script>
+    <button onclick="triggerLogin()" class="gate-btn">Authenticate →</button>
+    <p class="gate-hint">Hint: warroom</p>
+  </div>
+</div>
+
+<!-- =============================================
+     DASHBOARD
+     ============================================= -->
+<div id="dashboard">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 16 16"><path d="M8 1L15 5v6L8 15 1 11V5z"/></svg>
+      </div>
+      <div>
+        <div class="brand-text">WAR<span>ROOM</span></div>
+        <div class="brand-sub">PRODUCTION LINE PROTOCOL</div>
+      </div>
+    </div>
+
+    <div class="topbar-tabs">
+      <button class="tab-btn active" onclick="switchTab('gym')">
+        <span>Block 1</span><span>GYM</span>
+        <span class="tab-num" id="tab-num-gym">0</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('hunt')">
+        <span>Block 2</span><span>HUNT</span>
+        <span class="tab-num" id="tab-num-hunt">0</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('meta')">
+        <span>MVP &</span><span>META</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('calendar')">
+        <span>CAL &</span><span>LIBRARY</span>
+      </button>
+    </div>
+
+    <div class="topbar-right">
+      <div class="clock-group">
+        <div class="clock-item">
+          <div class="clock-zone">Germany</div>
+          <div class="clock-time" id="germanClock">00:00:00</div>
+          <div class="clock-status" id="timeStatus1">—</div>
+        </div>
+        <div class="clock-item">
+          <div class="clock-zone">UAE</div>
+          <div class="clock-time" id="uaeClock">00:00:00</div>
+          <div class="clock-status" id="timeStatus3">—</div>
+        </div>
+        <div class="clock-item">
+          <div class="clock-zone">Cloud</div>
+          <div class="sync-status" id="timeStatus">—</div>
+        </div>
+      </div>
+      <div class="theme-switcher">
+        <button onclick="setTheme('theme-dark')" class="theme-btn" title="Dark">🌑</button>
+        <button onclick="setTheme('theme-light')" class="theme-btn" title="Light">☀️</button>
+        <button onclick="setTheme('theme-creative')" class="theme-btn" title="Vivid">🌀</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE TABS -->
+  <div style="display:flex;gap:0;border-bottom:1px solid var(--border);overflow-x:auto;" class="mobile-tabs">
+    <button class="tab-btn active" onclick="switchTab('gym')" style="border:none;border-right:1px solid var(--border);flex:1;">GYM</button>
+    <button class="tab-btn" onclick="switchTab('hunt')" style="border:none;border-right:1px solid var(--border);flex:1;">HUNT</button>
+    <button class="tab-btn" onclick="switchTab('meta')" style="border:none;border-right:1px solid var(--border);flex:1;">META</button>
+    <button class="tab-btn" onclick="switchTab('calendar')" style="border:none;flex:1;">CAL</button>
+  </div>
+
+  <div class="main">
+
+    <!-- ============== GYM ============== -->
+    <div id="gym" class="section active">
+      <div class="grid-2">
+
+        <!-- Log form -->
+        <div class="panel">
+          <div class="panel-title">Log Problem</div>
+          <div class="form-row">
+            <div class="field">
+              <label>Problem Name</label>
+              <input type="text" id="lc_name" placeholder="e.g. Valid Anagram">
+            </div>
+            <div class="field">
+              <label>Topic</label>
+              <select id="lc_topic">
+                <option value="Arrays">Arrays & Hashing</option>
+                <option value="TwoPointers">Two Pointers</option>
+                <option value="SlidingWindow">Sliding Window</option>
+                <option value="Stack">Stack</option>
+                <option value="BinarySearch">Binary Search</option>
+                <option value="LinkedList">Linked List</option>
+                <option value="Trees">Trees</option>
+                <option value="Heap">Heap / PQ</option>
+                <option value="Backtracking">Backtracking</option>
+                <option value="Graphs">Graphs</option>
+                <option value="DP">Dynamic Programming</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Difficulty</label>
+              <select id="lc_diff">
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Status</label>
+              <select id="lc_status">
+                <option value="Green">✅ Solved (Own)</option>
+                <option value="Yellow">🟡 Solved (Hint)</option>
+                <option value="Red">🔴 Watched Solution</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Time (mins)</label>
+              <input type="number" id="lc_time" placeholder="20">
+            </div>
+          </div>
+          <button class="btn" onclick="logGym()">Log Problem →</button>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="panel">
+          <div class="panel-title amber">Recent Activity</div>
+          <div class="table-wrap">
+            <table id="gymTable">
+              <thead><tr>
+                <th>Date</th><th>Problem</th><th>Topic</th><th>Status</th>
+              </tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Progress Map -->
+      <div class="panel">
+        <div class="panel-title blue">NeetCode 150 — Progress Map</div>
+        <div class="topic-grid" id="progressMap"></div>
+      </div>
+    </div>
+
+    <!-- ============== HUNT ============== -->
+    <div id="hunt" class="section">
+
+      <!-- Scorecard -->
+      <div class="grid-4 mb-md">
+        <div class="stat-card white">
+          <div class="stat-value white" id="stat_total">0</div>
+          <div class="stat-label">Apps Sent (7d)</div>
+        </div>
+        <div class="stat-card amber">
+          <div class="stat-value amber" id="stat_dream">0</div>
+          <div class="stat-label">Dream Apps</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-value green" id="stat_interview">0%</div>
+          <div class="stat-label">Interview Rate</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-value red" id="stat_reject">0</div>
+          <div class="stat-label">Rejections</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- Log Form -->
+        <div class="panel" id="huntFormPanel">
+          <div class="panel-title">Log Application</div>
+          <input type="hidden" id="app_edit_id">
+          <div class="form-row">
+            <div class="field">
+              <label>Role / Title</label>
+              <input type="text" id="app_role" placeholder="e.g. Python Dev">
+            </div>
+            <div class="field">
+              <label>Company</label>
+              <input type="text" id="app_company" placeholder="e.g. Siemens">
+            </div>
+            <div class="field">
+              <label>Job Link</label>
+              <input type="text" id="app_link" placeholder="https://...">
+            </div>
+            <div class="field">
+              <label>Job Type</label>
+              <select id="app_type">
+                <option value="Survival">Survival (Bulk)</option>
+                <option value="Dream">🌟 Dream (Tailored)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Location</label>
+              <input type="text" id="app_loc" placeholder="e.g. Berlin, Remote">
+            </div>
+            <div class="field">
+              <label>Visa Sponsorship</label>
+              <select id="app_visa">
+                <option>Unknown</option>
+                <option>Yes</option>
+                <option>No</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Source</label>
+              <select id="app_source">
+                <option>LinkedIn</option>
+                <option>Indeed</option>
+                <option>CompanySite</option>
+                <option>Referral</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Follow-up Date</label>
+              <input type="date" id="app_followup">
+            </div>
+            <div class="field">
+              <label>Status</label>
+              <select id="app_status">
+                <option value="Applied">Applied</option>
+                <option value="Interview">Interview</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Offer">Offer</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex gap-sm">
+            <button class="btn" id="btn_log_app" onclick="logApp()">Log Application →</button>
+            <button class="btn btn-ghost" id="btn_cancel_edit" onclick="cancelEdit()" style="display:none;">Cancel</button>
+          </div>
+        </div>
+
+        <!-- App History -->
+        <div class="panel">
+          <div class="panel-title red">Application History</div>
+          <div class="search-row">
+            <div class="search-wrap">
+              <span class="search-icon">⌕</span>
+              <input type="text" id="app_search" placeholder="Search company or role..." onkeyup="searchApps()">
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table id="appTable">
+              <thead><tr>
+                <th>Date</th><th>Role @ Company</th><th>Type</th><th>Status</th><th>Follow Up</th><th></th>
+              </tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== META ============== -->
+    <div id="meta" class="section">
+      <div class="grid-2">
+        <div>
+          <!-- Streaks -->
+          <div class="panel">
+            <div class="panel-title">Engagement Protocol</div>
+            <div class="streak-grid">
+              <div class="streak-card" style="border-bottom: 2px solid var(--green);">
+                <div class="streak-num text-green" id="streak_current">0</div>
+                <div class="streak-label">Current Streak</div>
+              </div>
+              <div class="streak-card" style="border-bottom: 2px solid var(--muted);">
+                <div class="streak-num text-white" id="streak_best">0</div>
+                <div class="streak-label">Longest Streak</div>
+              </div>
+              <div class="streak-card" style="border-bottom: 2px solid var(--red);">
+                <div class="streak-num text-red" id="streak_zero">0</div>
+                <div class="streak-label">Zero Days (Mo)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mission Status -->
+          <div class="panel">
+            <div class="flex justify-between flex-center mb-md">
+              <div class="panel-title" style="border:none;padding:0;margin:0;">Today's Mission</div>
+              <button id="modeToggle" onclick="toggleMode()" class="mode-badge">MODE: 🔥 WAR</button>
+            </div>
+
+            <div class="mission-row">
+              <div class="mission-header">
+                <span class="mission-name" id="label_gym">GYM — Target: 2</span>
+                <span class="mission-score" id="score_gym">0 / 2</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill amber" id="bar_gym" style="width:0%"></div>
+              </div>
+            </div>
+
+            <div class="mission-row">
+              <div class="mission-header">
+                <span class="mission-name" id="label_hunt">HUNT — Target: 5</span>
+                <span class="mission-score" id="score_hunt">0 / 5</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="bar_hunt" style="width:0%"></div>
+              </div>
+            </div>
+
+            <div id="day_result" class="mission-banner pending">Mission Pending...</div>
+          </div>
+        </div>
+
+        <!-- Confidence Log -->
+        <div class="panel">
+          <div class="panel-title blue">Confidence Log (Weekly)</div>
+          <p class="small text-muted mb-sm" style="font-family:var(--font-mono)">// What improved? What sucked but I did anyway?</p>
+          <textarea id="meta_log" placeholder="Log your thoughts..."></textarea>
+          <button class="btn mt-sm" onclick="saveMetaLog()">Save Entry →</button>
+          <div id="saved_logs" class="log-feed"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============== CALENDAR ============== -->
+    <div id="calendar" class="section">
+      <div class="calendar-layout mb-md">
+        <!-- Calendar -->
+        <div class="panel">
+          <div class="cal-nav">
+            <button onclick="changeMonth(-1)" class="btn btn-sm btn-ghost">← Prev</button>
+            <div class="cal-month" id="cal_month_year">—</div>
+            <button onclick="changeMonth(1)" class="btn btn-sm btn-ghost">Next →</button>
+          </div>
+          <div id="cal_grid" class="cal-grid"></div>
+        </div>
+
+        <!-- Task Panel -->
+        <div class="task-panel">
+          <div class="task-date-header" id="selected_date_display">Select a Date</div>
+          <div class="task-add-row">
+            <input type="text" id="new_task_input" placeholder="Add task..." onkeypress="handleTaskEnter(event)" style="flex:1;">
+            <button onclick="addTask()" class="btn btn-sm">+</button>
+          </div>
+          <div id="task_list" class="task-list">
+            <div class="no-tasks">No missions for this day.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Library -->
+      <div class="panel">
+        <div class="panel-title amber">📚 The Library</div>
+        <div class="lib-form-row">
+          <div class="field">
+            <label>Title</label>
+            <input type="text" id="lib_title" placeholder="e.g. NeetCode Roadmap">
+          </div>
+          <div class="field" style="flex:2;">
+            <label>URL</label>
+            <input type="text" id="lib_url" placeholder="https://...">
+          </div>
+          <div class="field narrow">
+            <label>Tag</label>
+            <select id="lib_tag">
+              <option>Tool</option>
+              <option>Read</option>
+              <option>Video</option>
+            </select>
+          </div>
+          <div class="field" style="flex:0;align-self:flex-end;">
+            <button class="btn" onclick="addLibraryItem()">Save →</button>
+          </div>
+        </div>
+        <div id="library_list" class="lib-grid"></div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /dashboard -->
+
+<script>
+// =============================================
+//  CONFIGURATION
+// =============================================
+const GYM_KEY      = 'war_gym_logs';
+const APP_KEY      = 'war_app_logs';
+const META_KEY     = 'war_meta_logs';
+const API_KEY_STORAGE = 'war_api_url';
+const LIB_KEY      = 'war_library';
+const CALENDAR_KEY = 'war_calendar_tasks';
+const THEME_KEY    = 'war_theme';
+
+let API_URL = localStorage.getItem(API_KEY_STORAGE) || '';
+let currentMode = 'WAR';
+let editingAppId = null;
+
+// =============================================
+//  HELPERS
+// =============================================
+function getLocalArray(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw || raw === 'undefined') return [];
+    const p = JSON.parse(raw);
+    return Array.isArray(p) ? p : [];
+  } catch { return []; }
+}
+
+function formatDate(d) {
+  if (!d) return '—';
+  const dt = new Date(d);
+  if (isNaN(dt)) return d;
+  return dt.toLocaleDateString();
+}
+
+// =============================================
+//  THEME
+// =============================================
+function loadTheme() {
+  const t = localStorage.getItem(THEME_KEY) || 'theme-dark';
+  document.body.className = t;
+}
+function setTheme(t) {
+  document.body.className = t;
+  localStorage.setItem(THEME_KEY, t);
+}
+
+// =============================================
+//  GATE
+// =============================================
+function triggerLogin() { checkPass({ key: 'Enter' }); }
+
+function checkPass(e) {
+  if (e.key !== 'Enter') return;
+  const pass = document.getElementById('password').value;
+  const urlInput = document.getElementById('apiUrl').value;
+
+  if (pass === 'warroom') {
+    if (urlInput.trim()) {
+      API_URL = urlInput.trim();
+      localStorage.setItem(API_KEY_STORAGE, API_URL);
+    }
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadTheme();
+    if (API_URL) syncFromCloud();
+    else { loadLocalData(); }
+  } else {
+    const inp = document.getElementById('password');
+    inp.classList.add('error');
+    setTimeout(() => inp.classList.remove('error'), 400);
+  }
+}
+
+// =============================================
+//  CLOUD
+// =============================================
+async function syncFromCloud() {
+  const s = document.getElementById('timeStatus');
+  s.innerText = '⟳ Syncing…';
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    localStorage.setItem(GYM_KEY, JSON.stringify(data.gym));
+    localStorage.setItem(APP_KEY, JSON.stringify(data.hunt));
+    localStorage.setItem(META_KEY, JSON.stringify(data.meta));
+    localStorage.setItem(LIB_KEY, JSON.stringify(data.library));
+    loadLocalData();
+    s.innerText = '✓ Synced';
+    s.style.color = 'var(--green)';
+  } catch {
+    s.innerText = '✕ Failed';
+    s.style.color = 'var(--red)';
+    loadLocalData();
+  }
+}
+
+function sendToCloud(type, dataObj) {
+  if (!API_URL) return;
+  fetch(API_URL, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ type, data: dataObj })
+  }).catch(e => console.error('Cloud:', e));
+}
+
+// =============================================
+//  GYM
+// =============================================
+function getGymData() { return JSON.parse(localStorage.getItem(GYM_KEY)) || []; }
+
+function logGym() {
+  const name = document.getElementById('lc_name').value.trim();
+  if (!name) return;
+  const entry = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString(),
+    name,
+    topic: document.getElementById('lc_topic').value,
+    difficulty: document.getElementById('lc_diff').value,
+    status: document.getElementById('lc_status').value,
+    time: document.getElementById('lc_time').value
+  };
+  const data = getGymData();
+  data.unshift(entry);
+  localStorage.setItem(GYM_KEY, JSON.stringify(data));
+  sendToCloud('gym', entry);
+  document.getElementById('lc_name').value = '';
+  loadGymData();
+  checkDailyProgress();
+}
+
+function loadGymData() {
+  const data = getGymData();
+  const tbody = document.querySelector('#gymTable tbody');
+  tbody.innerHTML = '';
+
+  data.slice(0, 10).forEach(log => {
+    const statusClass = log.status === 'Green' ? 'green' : log.status === 'Yellow' ? 'amber' : 'red';
+    const statusLabel = log.status === 'Green' ? '✓ Own' : log.status === 'Yellow' ? '~ Hint' : '✕ Watch';
+    tbody.innerHTML += `<tr>
+      <td class="mono small text-muted">${formatDate(log.date)}</td>
+      <td><div class="bold">${log.name}</div><div class="small text-muted">${log.difficulty}</div></td>
+      <td><span class="tag">${log.topic}</span></td>
+      <td><span class="status-pill ${statusClass}">${statusLabel}${log.time ? ' · ' + log.time + 'm' : ''}</span></td>
+    </tr>`;
+  });
+
+  // Progress Map
+  const TOPICS = {Arrays:9,TwoPointers:5,SlidingWindow:6,Stack:7,BinarySearch:7,LinkedList:6,Trees:15,Heap:7,Backtracking:9,Graphs:13,DP:12};
+  const counts = {};
+  data.forEach(l => counts[l.topic] = (counts[l.topic]||0)+1);
+  const map = document.getElementById('progressMap');
+  map.innerHTML = '';
+  let total = 0, done = 0;
+  for (const [t, g] of Object.entries(TOPICS)) {
+    const c = counts[t] || 0;
+    total += g; done += Math.min(c, g);
+    const pct = Math.min((c/g)*100, 100);
+    const col = pct >= 100 ? 'var(--green)' : pct >= 50 ? 'var(--amber)' : 'var(--muted)';
+    map.innerHTML += `<div class="topic-card">
+      <div class="topic-name">${t} <span style="color:${col};font-weight:700;">${c}/${g}</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${col}"></div></div>
+    </div>`;
+  }
+  // Update tab badge
+  document.getElementById('tab-num-gym').innerText = data.length;
+}
+
+// =============================================
+//  HUNT
+// =============================================
+function getAppData() { return JSON.parse(localStorage.getItem(APP_KEY)) || []; }
+
+function logApp() {
+  const role = document.getElementById('app_role').value.trim();
+  const company = document.getElementById('app_company').value.trim();
+  if (!role || !company) return alert('Role and Company required.');
+
+  const data = getAppData();
+  if (editingAppId) {
+    const i = data.findIndex(x => x.id === editingAppId);
+    if (i > -1) {
+      data[i] = { ...data[i],
+        role, company,
+        link: document.getElementById('app_link').value,
+        type: document.getElementById('app_type').value,
+        location: document.getElementById('app_loc').value,
+        visa: document.getElementById('app_visa').value,
+        source: document.getElementById('app_source').value,
+        followup: document.getElementById('app_followup').value,
+        status: document.getElementById('app_status').value
+      };
+      localStorage.setItem(APP_KEY, JSON.stringify(data));
+      sendToCloud('hunt', data[i]);
+      cancelEdit();
+    }
+  } else {
+    const entry = {
+      id: Date.now(), date: new Date().toLocaleDateString(), timestamp: Date.now(),
+      role, company,
+      link: document.getElementById('app_link').value,
+      type: document.getElementById('app_type').value,
+      location: document.getElementById('app_loc').value,
+      visa: document.getElementById('app_visa').value,
+      source: document.getElementById('app_source').value,
+      followup: document.getElementById('app_followup').value,
+      status: document.getElementById('app_status').value
+    };
+    data.unshift(entry);
+    localStorage.setItem(APP_KEY, JSON.stringify(data));
+    sendToCloud('hunt', entry);
+    ['app_role','app_company','app_link'].forEach(id => document.getElementById(id).value = '');
+  }
+  loadAppData();
+  checkDailyProgress();
+}
+
+function searchApps() { loadAppData(); }
+
+function editApp(id) {
+  const app = getAppData().find(x => x.id === id);
+  if (!app) return;
+  ['app_role','app_company','app_link','app_type','app_loc','app_visa','app_source','app_followup','app_status'].forEach(field => {
+    const key = field.replace('app_','').replace('loc','location');
+    const el = document.getElementById(field);
+    if (el) el.value = app[key] || app[field.replace('app_','')] || '';
+  });
+  // manual map
+  document.getElementById('app_role').value = app.role || '';
+  document.getElementById('app_company').value = app.company || '';
+  document.getElementById('app_link').value = app.link || '';
+  document.getElementById('app_type').value = app.type || 'Survival';
+  document.getElementById('app_loc').value = app.location || '';
+  document.getElementById('app_visa').value = app.visa || 'Unknown';
+  document.getElementById('app_source').value = app.source || 'LinkedIn';
+  document.getElementById('app_followup').value = app.followup || '';
+  document.getElementById('app_status').value = app.status || 'Applied';
+
+  editingAppId = id;
+  const btn = document.getElementById('btn_log_app');
+  btn.innerText = 'Update Application →';
+  btn.classList.add('btn-update');
+  document.getElementById('btn_cancel_edit').style.display = 'inline-block';
+  document.getElementById('huntFormPanel').scrollIntoView({ behavior: 'smooth' });
+}
+
+function cancelEdit() {
+  editingAppId = null;
+  const btn = document.getElementById('btn_log_app');
+  btn.innerText = 'Log Application →';
+  btn.classList.remove('btn-update');
+  document.getElementById('btn_cancel_edit').style.display = 'none';
+  ['app_role','app_company','app_link'].forEach(id => document.getElementById(id).value = '');
+}
+
+function loadAppData() {
+  const data = getAppData();
+  const q = (document.getElementById('app_search')?.value || '').toLowerCase();
+  const tbody = document.querySelector('#appTable tbody');
+  if (tbody) tbody.innerHTML = '';
+
+  let total=0, dream=0, interview=0, reject=0;
+  const weekAgo = Date.now() - 7*24*60*60*1000;
+
+  data.forEach(log => {
+    if (q && !log.company.toLowerCase().includes(q) && !log.role.toLowerCase().includes(q)) return;
+    if (tbody) {
+      const sc = log.status==='Interview' ? 'green' : log.status==='Rejected' ? 'red' : log.status==='Offer' ? 'amber' : 'muted';
+      tbody.innerHTML += `<tr>
+        <td class="mono small text-muted">${formatDate(log.date)}</td>
+        <td><div class="bold">${log.role}</div><div class="small text-muted">${log.company}</div></td>
+        <td>${log.type==='Dream'?'<span class="status-pill amber">🌟 Dream</span>':'<span class="text-muted small">Survival</span>'}</td>
+        <td><span class="status-pill ${sc}">${log.status}</span></td>
+        <td class="mono small text-muted">${log.followup || '—'}</td>
+        <td><button class="btn btn-sm btn-ghost" onclick="editApp(${log.id})">Edit</button></td>
+      </tr>`;
+    }
+    if (log.timestamp > weekAgo) {
+      total++;
+      if (log.type==='Dream') dream++;
+      if (log.status==='Interview'||log.status==='Offer') interview++;
+      if (log.status==='Rejected') reject++;
+    }
+  });
+
+  const si = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; };
+  si('stat_total', total);
+  si('stat_dream', dream);
+  si('stat_reject', reject);
+  si('stat_interview', (total > 0 ? Math.round((interview/total)*100) : 0) + '%');
+  document.getElementById('tab-num-hunt').innerText = data.length;
+}
+
+// =============================================
+//  META
+// =============================================
+function saveMetaLog() {
+  const text = document.getElementById('meta_log').value.trim();
+  if (!text) return;
+  const entry = { date: new Date().toLocaleDateString(), text };
+  const logs = getLocalArray(META_KEY);
+  logs.unshift(entry);
+  localStorage.setItem(META_KEY, JSON.stringify(logs));
+  sendToCloud('meta', entry);
+  document.getElementById('meta_log').value = '';
+  renderMetaLogs();
+}
+
+function renderMetaLogs() {
+  const logs = getLocalArray(META_KEY);
+  document.getElementById('saved_logs').innerHTML = logs.slice(0,3).map(l =>
+    `<div class="log-entry"><div class="log-date">${l.date}</div>${l.text}</div>`
+  ).join('');
+}
+
+// =============================================
+//  SHARED
+// =============================================
+function loadLocalData() {
+  loadGymData(); loadAppData(); renderMetaLogs(); renderLibrary();
+  if (document.getElementById('cal_grid')) { initCalendar(); renderTaskList(); }
+  checkDailyProgress(); calculateStreaks();
+}
+
+function checkDailyProgress() {
+  const today = new Date().toLocaleDateString();
+  const gymCount = getGymData().filter(l => l.date === today).length;
+  const appCount = getAppData().filter(l => l.date === today).length;
+  const gT = currentMode === 'WAR' ? 2 : 1;
+  const aT = currentMode === 'WAR' ? 5 : 1;
+
+  document.getElementById('score_gym').innerText = `${gymCount} / ${gT}`;
+  document.getElementById('label_gym').innerText = `GYM — Target: ${gT}`;
+  document.getElementById('bar_gym').style.width = Math.min((gymCount/gT)*100, 100) + '%';
+  document.getElementById('score_hunt').innerText = `${appCount} / ${aT}`;
+  document.getElementById('label_hunt').innerText = `HUNT — Target: ${aT}`;
+  document.getElementById('bar_hunt').style.width = Math.min((appCount/aT)*100, 100) + '%';
+
+  const r = document.getElementById('day_result');
+  if (gymCount >= gT && appCount >= aT) {
+    r.innerHTML = '✓ Mission Accomplished'; r.className = 'mission-banner success';
+  } else {
+    r.innerHTML = 'Mission Pending…'; r.className = 'mission-banner pending';
+  }
+}
+
+function calculateStreaks() {
+  const dates = new Set([...getGymData(), ...getAppData()].map(x => x.date));
+  document.getElementById('streak_current').innerText = dates.size;
+  document.getElementById('streak_best').innerText = dates.size;
+  document.getElementById('streak_zero').innerText = 0;
+}
+
+function toggleMode() {
+  currentMode = currentMode === 'WAR' ? 'MVP' : 'WAR';
+  document.getElementById('modeToggle').innerText = `MODE: ${currentMode === 'WAR' ? '🔥 WAR' : '💤 MVP'}`;
+  checkDailyProgress();
+}
+
+function switchTab(id) {
+  document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  if (id === 'calendar') setTimeout(initCalendar, 50);
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.getAttribute('onclick')?.includes(id)) b.classList.add('active');
+  });
+}
+
+// =============================================
+//  CLOCKS
+// =============================================
+function updateClocks() {
+  const now = new Date();
+  const berlin = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Berlin' }));
+  const uae    = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dubai' }));
+
+  document.getElementById('germanClock').innerText = berlin.toLocaleTimeString();
+  document.getElementById('uaeClock').innerText    = uae.toLocaleTimeString();
+
+  function getStatus(h) {
+    if (h >= 9 && h < 12) return ['⚡ Prime', 'var(--green)'];
+    if (h >= 12 && h < 18) return ['● Active', 'var(--text)'];
+    return ['○ Sleep', 'var(--muted)'];
+  }
+  const [s1, c1] = getStatus(berlin.getHours());
+  const [s3, c3] = getStatus(uae.getHours());
+  const st1 = document.getElementById('timeStatus1');
+  const st3 = document.getElementById('timeStatus3');
+  if (!st1.innerText.includes('Sync')) { st1.innerText = s1; st1.style.color = c1; }
+  st3.innerText = s3; st3.style.color = c3;
+}
+setInterval(updateClocks, 1000);
+updateClocks();
+
+// =============================================
+//  CALENDAR
+// =============================================
+let currentDate = new Date();
+let selectedDateKey = null;
+
+function getCalendarData() { return JSON.parse(localStorage.getItem(CALENDAR_KEY)) || {}; }
+
+function initCalendar() { renderCalendarGrid(); selectDate(new Date().toISOString().split('T')[0]); }
+
+function changeMonth(d) { currentDate.setMonth(currentDate.getMonth() + d); renderCalendarGrid(); }
+
+function renderCalendarGrid() {
+  const grid = document.getElementById('cal_grid');
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const year = currentDate.getFullYear(), month = currentDate.getMonth();
+  document.getElementById('cal_month_year').innerText = `${monthNames[month].toUpperCase()} ${year}`;
+  grid.innerHTML = '';
+  ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d => grid.innerHTML += `<div class="cal-header">${d}</div>`);
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const todayKey = new Date().toISOString().split('T')[0];
+  const tasks = getCalendarData();
+
+  for (let i = 0; i < firstDay; i++) grid.innerHTML += '<div></div>';
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const hasTasks = (tasks[key]||[]).length > 0;
+    const div = document.createElement('div');
+    div.className = `cal-day${key===todayKey?' today':''}${key===selectedDateKey?' selected':''}`;
+    div.innerHTML = `<span class="day-num">${d}</span>${hasTasks?'<div class="cal-dot"></div>':''}`;
+    div.onclick = () => selectDate(key);
+    grid.appendChild(div);
+  }
+}
+
+function selectDate(key) { selectedDateKey = key; renderCalendarGrid(); renderTaskList(); }
+
+function renderTaskList() {
+  const list = document.getElementById('task_list');
+  const header = document.getElementById('selected_date_display');
+  const tasks = getCalendarData();
+  const dayTasks = tasks[selectedDateKey] || [];
+  if (selectedDateKey) header.innerText = new Date(selectedDateKey).toDateString().toUpperCase();
+  list.innerHTML = '';
+  if (!dayTasks.length) { list.innerHTML = '<div class="no-tasks">No missions.</div>'; return; }
+  dayTasks.forEach((task, i) => {
+    const div = document.createElement('div');
+    div.className = `task-item${task.done?' done':''}`;
+    div.innerHTML = `
+      <div class="task-check-area" onclick="toggleTask(${i})">
+        <div class="task-check">${task.done?'✓':''}</div>
+        <span class="task-text">${task.text}</span>
+      </div>
+      <button class="task-del" onclick="deleteTask(${i})">×</button>`;
+    list.appendChild(div);
+  });
+}
+
+function addTask() {
+  const input = document.getElementById('new_task_input');
+  const text = input.value.trim();
+  if (!text || !selectedDateKey) return;
+  const data = getCalendarData();
+  if (!data[selectedDateKey]) data[selectedDateKey] = [];
+  data[selectedDateKey].push({ text, done: false });
+  localStorage.setItem(CALENDAR_KEY, JSON.stringify(data));
+  input.value = '';
+  renderTaskList(); renderCalendarGrid();
+}
+
+function toggleTask(i) {
+  const data = getCalendarData();
+  data[selectedDateKey][i].done = !data[selectedDateKey][i].done;
+  localStorage.setItem(CALENDAR_KEY, JSON.stringify(data));
+  renderTaskList();
+}
+
+function deleteTask(i) {
+  const data = getCalendarData();
+  data[selectedDateKey].splice(i, 1);
+  localStorage.setItem(CALENDAR_KEY, JSON.stringify(data));
+  renderTaskList(); renderCalendarGrid();
+}
+
+function handleTaskEnter(e) { if (e.key === 'Enter') addTask(); }
+
+// =============================================
+//  LIBRARY
+// =============================================
+function addLibraryItem() {
+  const title = document.getElementById('lib_title').value.trim();
+  const url   = document.getElementById('lib_url').value.trim();
+  const tag   = document.getElementById('lib_tag').value;
+  if (!title || !url) return;
+  const data = getLocalArray(LIB_KEY);
+  data.unshift({ title, url, tag });
+  localStorage.setItem(LIB_KEY, JSON.stringify(data));
+  sendToCloud('library', { title, url, tag });
+  document.getElementById('lib_title').value = '';
+  document.getElementById('lib_url').value = '';
+  renderLibrary();
+}
+
+function renderLibrary() {
+  const data = getLocalArray(LIB_KEY);
+  const list = document.getElementById('library_list');
+  if (!list) return;
+  if (!data.length) { list.innerHTML = '<div class="text-muted mono small">Library is empty.</div>'; return; }
+  list.innerHTML = data.map(item => `
+    <div class="lib-card">
+      <span class="lib-tag-badge">${item.tag}</span>
+      <div class="mb-sm"><a href="${item.url}" target="_blank" class="lib-title">${item.title} ↗</a></div>
+      <div class="lib-url-text">${item.url}</div>
+    </div>`).join('');
+}
+</script>
 </body>
 </html>
